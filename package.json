@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {},
   "private": true,
-  "dependencies": {},
   "devDependencies": {
     "@nx/js": "20.8.0",
+    "lefthook": "^1.11.10",
     "nx": "20.8.0",
     "prettier": "^2.6.2",
     "tslib": "^2.3.0",
