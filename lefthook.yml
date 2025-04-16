@@ -44,3 +44,9 @@ commit-msg:
   commands:
     "validate commit message":
       run: npx --no -- commitlint --edit {1}
+
+pre-push:
+  parallel: true
+  commands:
+    "validate branch name":
+      run: npx validate-branch-name
