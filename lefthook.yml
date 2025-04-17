@@ -45,8 +45,19 @@ commit-msg:
     "validate commit message":
       run: npx --no -- commitlint --edit {1}
 
+pre-commit:
+  parallel: true
+  commands:
+    stylelint:
+      run: npx stylelint {staged_files}
+      glob: "**/*.{css,scss}"
+    eslint:
+      run: npx eslint {staged_files}
+      glob: "**/*.{js,ts,jsx,tsx}"
+
 pre-push:
   parallel: true
   commands:
     "validate branch name":
       run: npx validate-branch-name
+
