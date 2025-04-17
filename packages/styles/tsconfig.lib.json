@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "emitDeclarationOnly": false,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/lib/transform/utils.js", "src/lib/transform/index.js", "src/lib/transform/generators/component.js", "src/index.js", "src/lib/transform/filters/component.js", "src/lib/transform/generators/semantic.js", "src/lib/transform/generators/index.js", "src/lib/transform/generators/core.js", "src/lib/transform/filters/index.js"],
+  "references": []
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@kajabi-ui/styles",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./*": "./dist/*"
+  },
+  "devDependencies": {
+    "@tokens-studio/sd-transforms": "^1.3.0",
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.1",
+    "sass-embedded": "^1.86.3",
+    "style-dictionary": "^4.3.3",
+    "vite": "^6.3.1"
+  },
+  "files": [
+    "dist/styles"
+  ],
+  "scripts": {
+    "clean": "rm -rf src/lib/tokens/_output",
+    "generate": "npm run clean && node src/lib/transform/index.js",
+    "build": "npm run generate && vite build"
+  }
+}
