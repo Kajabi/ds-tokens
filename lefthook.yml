@@ -49,7 +49,7 @@ pre-commit:
   parallel: true
   commands:
     stylelint:
-      run: npx stylelint {staged_files}
+      run: npx stylelint --allow-empty-input {staged_files}
       glob: "**/*.{css,scss}"
     eslint:
       run: npx eslint {staged_files}
