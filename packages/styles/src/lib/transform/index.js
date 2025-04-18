@@ -9,7 +9,7 @@ register(StyleDictionary, {
   /* options here if needed */
 });
 
-const buildPath = `${basePath}/_output/`;
+const buildPath = `_generated/`;
 
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
@@ -45,7 +45,7 @@ async function run() {
           files: [
             // Core and semantic files for the brand
             {
-              destination: `${themeName}/_${themeName}.scss`,
+              destination: `${themeName}/${themeName}.scss`,
               format: 'css/variables',
               filter: (token) => {
                 // Include core tokens
