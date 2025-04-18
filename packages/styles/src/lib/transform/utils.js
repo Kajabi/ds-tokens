@@ -1,1 +1,1 @@
-export const basePath = `src/lib/tokens`;
+export const basePath = `src/tokens`;
