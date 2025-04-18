@@ -1,1 +1,1 @@
-packages/styles/src/lib/tokens/_output/**/*.scss
+packages/styles/_generated/**/*.scss

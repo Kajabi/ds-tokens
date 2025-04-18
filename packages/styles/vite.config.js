@@ -8,7 +8,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: Object.fromEntries(
-        glob.sync('src/lib/tokens/_output/**/*.scss').map(file => [
+        glob.sync('_generated/**/*.scss').map(file => [
           // Keep the original file path as the key
           file,
           // Create full path to file
@@ -19,8 +19,7 @@ export default defineConfig({
         assetFileNames: ({ name }) => {
           // Extract the relevant part of the path and transform it
           const path = name
-            .replace('src/lib/tokens/_output/', '')
-            .replace(/\.scss$/, '.css');
+            .replace('_generated/', '')
           return path;
         }
       }

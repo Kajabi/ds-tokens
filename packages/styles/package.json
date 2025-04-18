@@ -15,11 +15,8 @@
     "style-dictionary": "^4.3.3",
     "vite": "^6.3.1"
   },
-  "files": [
-    "dist/styles"
-  ],
   "scripts": {
-    "clean": "rm -rf src/lib/tokens/_output",
+    "clean": "rm -rf _generated",
     "generate": "npm run clean && node src/lib/transform/index.js",
     "build": "npm run generate && vite build"
   }
