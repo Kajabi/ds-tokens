@@ -1,0 +1,12 @@
+styles:
+- head-branch: ['styles']
+
+tokens:
+- changed-files:
+  - any-glob-to-any-file: 'packages/styles/src/tokens/**/*'
+
+enhancement:
+- head-branch: ['feature']
+
+bug:
+- head-branch: ['fix']

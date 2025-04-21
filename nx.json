@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "origin/main",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -30,5 +31,47 @@
         "targetName": "lint"
       }
     }
-  ]
+  ],
+  "release": {
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    },
+    "conventionalCommits": {
+      "types": {
+        "docs": {
+          "changelog": {
+            "hidden": false,
+            "title": "Documentation 📄"
+          }
+        },
+        "feat": {
+          "changelog": {
+            "hidden": false,
+            "title": "Features 🚀"
+          }
+        },
+        "fix": {
+          "changelog": {
+            "hidden": false,
+            "title": "Bug Fixes 🐛"
+          }
+        },
+        "style": {
+          "changelog": {
+            "hidden": false,
+            "title": "Styles 🎨"
+          }
+        }
+      }
+    },
+    "git": {
+      "commitMessage": "chore(release): {version}"
+    },
+    "version": {
+      "conventionalCommits": true,
+      "preVersionCommand": "npx nx run-many -t build"
+    }
+  }
 }

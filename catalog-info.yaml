@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ds-tokens
+  description: The UI token and style library for Kajabi
+  tags:
+    - design
+    - ux
+    - javascript
+    - styles
+    - tokens
+    - token-studio
+  annotations:
+    backstage.io/source-location: url:https://github.com/Kajabi/ds-tokens/tree/main
+    github.com/project-slug: Kajabi/ds-tokens
+spec:
+  type: library
+  lifecycle: production
+  owner: design-system-services
+  system: pine
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ds-tokens.mono-repo
+spec:
+  targets:
+    - ./packages/styles/catalog-info.yaml
