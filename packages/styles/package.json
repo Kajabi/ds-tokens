@@ -21,6 +21,8 @@
   "scripts": {
     "clean": "rm -rf _generated",
     "generate": "npm run clean && node src/lib/transform/index.js",
-    "build": "npm run generate && vite build"
+    "build": "npm run generate && vite build",
+    "lint": "npm run lint.eslint",
+    "lint.eslint": "eslint src/lib/**/*"
   }
 }
