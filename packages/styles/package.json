@@ -7,6 +7,9 @@
     "./package.json": "./package.json",
     "./*": "./dist/*"
   },
+  "files": [
+    "dist/*"
+  ],
   "devDependencies": {
     "@tokens-studio/sd-transforms": "^1.3.0",
     "fs-extra": "^11.3.0",

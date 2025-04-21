@@ -1,0 +1,39 @@
+name: 'DS Tokens Build'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [ "**" ]
+
+# When pushing a new commit we should cancel
+# the previous run
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-styles:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/actions/build-styles
+        with:
+          node-version: ${{ matrix.node }}
+
+  test-lint:
+    needs: [build-styles]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/actions/test-lint
+        with:
+          node-version: ${{ matrix.node }}

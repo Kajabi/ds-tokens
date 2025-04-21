@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ds-tokens-styles
+  description: The library for both styles and tokens used within Kajabi
+  tags:
+    - javascript
+    - style-dictionary
+    - styles
+    - tokens
+    - token-studio
+spec:
+  type: library
+  lifecycle: production
+  owner: design-system-services
+  system: pine
+  subcomponentOf: ds-tokens
