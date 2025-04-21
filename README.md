@@ -1,109 +1,212 @@
-# KajabiUi
+# Kajabi Design System Tokens (@kajabi-ui/styles)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A comprehensive design tokens package that provides standardized design primitives for Kajabi's design system. This package (@kajabi-ui/styles) serves as the foundation for consistent UI development across all Kajabi products.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Purpose
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+This repository houses Kajabi's design system tokens, which serve as the single source of truth for colors, typography, spacing, and other design primitives used across Kajabi's products. These tokens ensure design consistency, streamline development, and create a unified visual experience.
 
-## Generate a library
+Key features:
+- Centralized design tokens management
+- Platform-agnostic implementation
+- Compatible with multiple formats (CSS, SCSS, JSON)
+- Built with [Style Dictionary](https://amzn.github.io/style-dictionary) and [Tokens Studio](https://tokens.studio/)
+- Easy integration with CDN options
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+## Installation
+
+### NPM Package
+
+```bash
+npm install @kajabi-ui/styles
 ```
 
-## Run tasks
+or
 
-To build the library use:
-
-```sh
-npx nx build pkg1
+```bash
+yarn add @kajabi-ui/styles
 ```
 
-To run any task with Nx use:
+### Usage in Projects
 
-```sh
-npx nx <target> <project-name>
+#### CSS Import
+
+```css
+@use '~@kajabi-ui/styles/pine/pine.css';
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+#### SCSS Import
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
+```scss
+@use '~@kajabi-ui/styles/pine/pine.scss';
 ```
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
+#### JavaScript Import
 
-[Learn more about Nx release &raquo;](hhttps://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
+```javascript
+import '@kajabi-ui/styles/pine/pine.css';
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+### CDN Usage with jsDelivr
 
-```sh
-npx nx sync:check
+You can also use jsDelivr to include our design tokens directly in your HTML without installing the package:
+
+```html
+<!-- Global CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kajabi-ui/styles/pine/pine.css">
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+The CDN option is ideal for:
+- Quick prototyping
+- Projects that don't use a build system
+- Third-party integrations with Kajabi
 
-## Set up CI!
+### Specific Component Usage
 
-### Step 1
+For more granular imports of specific components:
 
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+```css
+/* Import only chip tokens */
+@use '@kajabi-ui/styles/pine/components/pds-chip/pds-chip.tokens.scss';
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## Available Token Categories
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- Colors and themes
+- Typography (font families, sizes, weights)
+- Spacing and layout
+- Border properties (width, radius)
+- Shadows and elevation
+- Z-index
+- Motion and animations
+- Component-specific tokens (button, chip, etc.)
 
-### Step 2
+## Project Structure
 
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
+```
+ds-tokens/
+├── packages/
+│   └── styles/            # Main package (@kajabi-ui/styles)
+│       ├── src/
+│       │   ├── tokens/    # Source token files (JSON format)
+│       │   └── lib/       # Build and transformation scripts
+└── .github/              # GitHub workflows and configuration
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Development with Nx
 
-## Install Nx Console
+This project is built with [Nx](https://nx.dev/), a smart, extensible build framework. Nx helps manage monorepos and provides efficient build tools for multiple packages.
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### Using Nx Commands
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### Building the Project
 
-## Useful links
+```bash
+# Build the styles package
+npx nx run @kajabi-ui/styles:build
 
-Learn more:
+# Or using the shorter syntax
+npx nx build @kajabi-ui/styles
+```
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### Running Other Scripts
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# Generate tokens
+npx nx run @kajabi-ui/styles:generate
+
+# Run linting
+npx nx run @kajabi-ui/styles:lint
+```
+
+#### Nx Targets
+
+To see all available targets for the styles package:
+
+```bash
+npx nx show project @kajabi-ui/styles
+```
+
+## How to Contribute
+
+### Prerequisites
+
+- Node.js (check package.json for recommended version)
+- npm or yarn
+
+### Setup
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/kajabi/ds-tokens.git
+   cd ds-tokens
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Generate tokens
+   ```bash
+   npx nx run @kajabi-ui/styles:generate
+   # Or npm run generate
+   ```
+
+4. Build the package
+   ```bash
+   npx nx run @kajabi-ui/styles:build
+   # Or npm run build
+   ```
+
+### Using Token Studio
+
+This project uses [Tokens Studio](https://tokens.studio/) (formerly Figma Tokens) to manage design tokens. Token Studio provides a bridge between design and development by allowing designers to maintain tokens in Figma that can be exported and used in the development workflow.
+
+#### Getting Started with Token Studio:
+
+1. **For Designers**:
+   - Install the [Tokens Studio for Figma](https://www.figma.com/community/plugin/843461159747178978/tokens-studio-for-figma) plugin
+   - Connect to our shared token repository
+   - Make changes through the Token Studio interface
+
+2. **For Developers**:
+   - Token changes are synchronized with our repository through the build process
+   - Token files are stored in the `src/tokens/` directory
+   - Review and implement token changes using the standard contribution workflow
+
+### Contribution Workflow
+
+1. Create a feature branch
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. Make your changes to the token files in `src/tokens/`
+
+3. Run the token generation script
+   ```bash
+   npm run generate
+   ```
+
+4. Verify changes work as expected
+
+5. Commit your changes with a descriptive message
+   ```bash
+   git commit -m "Add new color tokens for marketing pages"
+   ```
+
+6. Push your changes and create a pull request
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. Request a review from the design systems team
+
+## Release Process
+
+The package is published to NPM with a structure that makes tokens accessible without the `dist/` prefix in import paths, ensuring a clean and intuitive developer experience.
+
+---
+
+© 2025 Kajabi, LLC. All rights reserved.
