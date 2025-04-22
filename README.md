@@ -1,137 +1,49 @@
-# Kajabi Design System Tokens (@kajabi-ui/styles)
+# Kajabi Design System Tokens
 
-A comprehensive design tokens package that provides standardized design primitives for Kajabi's design system. This package (@kajabi-ui/styles) serves as the foundation for consistent UI development across all Kajabi products.
+This monorepo contains design tokens and related packages that form the foundation of Kajabi's design system. These packages ensure design consistency across all Kajabi products and provide developers with standardized design primitives.
 
-## Purpose
+## About This Repository
 
-This repository houses Kajabi's design system tokens, which serve as the single source of truth for colors, typography, spacing, and other design primitives used across Kajabi's products. These tokens ensure design consistency, streamline development, and create a unified visual experience.
+This is an Nx-powered monorepo that houses packages related to Kajabi's design system tokens. Using a monorepo architecture allows us to maintain related packages together while keeping their codebases separate.
 
-Key features:
-- Centralized design tokens management
-- Platform-agnostic implementation
-- Compatible with multiple formats (CSS, SCSS, JSON)
-- Built with [Style Dictionary](https://amzn.github.io/style-dictionary) and [Tokens Studio](https://tokens.studio/)
-- Easy integration with CDN options
+## Packages
 
-## Installation
+| Project | Package | Version | Downloads | Links |
+| ------- | ------- | ------- | --------- | ----- |
+| Styles | [@kajabi-ui/styles](https://www.npmjs.com/package/@kajabi-ui/styles) | [![npm version](https://img.shields.io/npm/v/@kajabi-ui/styles.svg)](https://www.npmjs.com/package/@kajabi-ui/styles) | [![NPM Downloads](https://img.shields.io/npm/dm/@kajabi-ui/styles.svg)](https://www.npmjs.com/package/@kajabi-ui/styles) | [README](./packages/styles/README.md) |
 
-### NPM Package
+## Built with Nx
 
-```bash
-npm install @kajabi-ui/styles
-```
+This repository uses [Nx](https://nx.dev), a set of extensible dev tools for monorepos. Nx provides several benefits:
 
-or
+- Smart rebuilds of affected projects
+- Distributed task execution & computation caching
+- Powerful code generators & workspace analysis
+- Integrated tooling for linting, testing, and building
 
-```bash
-yarn add @kajabi-ui/styles
-```
+### Nx Commands
 
-### Usage in Projects
-
-#### CSS Import
-
-```css
-@use '~@kajabi-ui/styles/pine/pine.css';
-```
-
-#### SCSS Import
-
-```scss
-@use '~@kajabi-ui/styles/pine/pine.scss';
-```
-
-#### JavaScript Import
-
-```javascript
-import '@kajabi-ui/styles/pine/pine.css';
-```
-
-### CDN Usage with jsDelivr
-
-You can also use jsDelivr to include our design tokens directly in your HTML without installing the package:
-
-```html
-<!-- Global CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kajabi-ui/styles/dist/pine/pine.css">
-```
-
-The CDN option is ideal for:
-- Quick prototyping
-- Projects that don't use a build system
-- Third-party integrations with Kajabi
-
-### Specific Component Usage
-
-For more granular imports of specific components:
-
-```css
-/* Import only chip tokens */
-@use '@kajabi-ui/styles/pine/components/pds-chip/pds-chip.tokens.scss';
-```
-
-## Available Token Categories
-
-- Colors and themes
-- Typography (font families, sizes, weights)
-- Spacing and layout
-- Border properties (width, radius)
-- Shadows and elevation
-- Z-index
-- Motion and animations
-- Component-specific tokens (button, chip, etc.)
-
-## Project Structure
-
-```
-ds-tokens/
-├── packages/
-│   └── styles/            # Main package (@kajabi-ui/styles)
-│       ├── src/
-│       │   ├── tokens/    # Source token files (JSON format)
-│       │   └── lib/       # Build and transformation scripts
-└── .github/              # GitHub workflows and configuration
-```
-
-## Development with Nx
-
-This project is built with [Nx](https://nx.dev/), a smart, extensible build framework. Nx helps manage monorepos and provides efficient build tools for multiple packages.
-
-### Using Nx Commands
-
-#### Building the Project
+Here are some common Nx commands used in this repository:
 
 ```bash
-# Build the styles package
-npx nx run @kajabi-ui/styles:build
+# Build all packages
+npx nx run-many --target=build --all
 
-# Or using the shorter syntax
+# Build a specific package
 npx nx build @kajabi-ui/styles
+
+# Run lint on all packages
+npx nx run-many --target=lint --all
+
+# Generate a graph of the project dependencies
+npx nx graph
 ```
 
-#### Running Other Scripts
-
-```bash
-# Generate tokens
-npx nx run @kajabi-ui/styles:generate
-
-# Run linting
-npx nx run @kajabi-ui/styles:lint
-```
-
-#### Nx Targets
-
-To see all available targets for the styles package:
-
-```bash
-npx nx show project @kajabi-ui/styles
-```
-
-## How to Contribute
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (check package.json for recommended version)
+- Node.js (see `package.json` for recommended version)
 - npm or yarn
 
 ### Setup
@@ -147,65 +59,62 @@ npx nx show project @kajabi-ui/styles
    npm install
    ```
 
-3. Generate tokens
+3. Build all packages
    ```bash
-   npx nx run @kajabi-ui/styles:generate
-   # Or npm run generate
+   npx nx run-many --target=build --all
    ```
 
-4. Build the package
-   ```bash
-   npx nx run @kajabi-ui/styles:build
-   # Or npm run build
-   ```
+## Contributing
 
-### Using Token Studio
-
-This project uses [Tokens Studio](https://tokens.studio/) (formerly Figma Tokens) to manage design tokens. Token Studio provides a bridge between design and development by allowing designers to maintain tokens in Figma that can be exported and used in the development workflow.
-
-#### Getting Started with Token Studio:
-
-1. **For Designers**:
-   - Install the [Tokens Studio for Figma](https://www.figma.com/community/plugin/843461159747178978/tokens-studio-for-figma) plugin
-   - Connect to our shared token repository
-   - Make changes through the Token Studio interface
-
-2. **For Developers**:
-   - Token changes are synchronized with our repository through the build process
-   - Token files are stored in the `src/tokens/` directory
-   - Review and implement token changes using the standard contribution workflow
+We welcome contributions from the team! Here's how to get started:
 
 ### Contribution Workflow
 
-1. Create a feature branch
+1. **Fork & Clone**: Fork the repository on GitHub, then clone your fork locally.
+   ```bash
+   # Fork the repo on GitHub first, then:
+   git clone https://github.com/YOUR-USERNAME/ds-tokens.git
+   cd ds-tokens
+   ```
+
+2. **Create a Branch**: Create a new branch for your feature or bug fix.
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-2. Make your changes to the token files in `src/tokens/`
+3. **Make Changes**: Implement your changes following our coding standards.
 
-3. Run the token generation script
+4. **Lint Code**: Ensure your changes meet our code quality standards.
    ```bash
-   npm run generate
+   npx nx affected --target=lint
    ```
 
-4. Verify changes work as expected
-
-5. Commit your changes with a descriptive message
+5. **Commit Changes**: We follow [Conventional Commits](https://www.conventionalcommits.org/) standards for commit messages.
    ```bash
-   git commit -m "Add new color tokens for marketing pages"
+   git commit -m "feat: add new color token system"
+   git commit -m "fix: resolve color token inconsistency"
+   git commit -m "docs: update token documentation"
    ```
 
-6. Push your changes and create a pull request
+   Common types include: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, and `chore`.
+
+6. **Push Changes**: Push your branch to GitHub.
    ```bash
    git push origin feature/your-feature-name
    ```
 
-7. Request a review from the design systems team
+7. **Create Pull Request**: Open a PR against the main branch and request reviews.
 
-## Release Process
+### Development Guidelines
 
-The package is published to NPM with a structure that makes tokens accessible without the `dist/` prefix in import paths, ensuring a clean and intuitive developer experience.
+- Follow the existing code style and conventions
+- Add tests for new features
+- Update documentation when necessary
+- Make sure all tests pass before submitting a PR
+
+## License
+
+See the [LICENSE](LICENSE) file for details.
 
 ---
 
