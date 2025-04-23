@@ -2,7 +2,7 @@
   "name": "@kajabi-ui/styles",
   "author": "Kajabi Design System Services",
   "description": "A collection of styles and tokens used within Kajabi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": {
     "./package.json": "./package.json",

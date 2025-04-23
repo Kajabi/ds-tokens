@@ -1,3 +1,13 @@
+## 0.0.3 (2025-04-23)
+
+### Bug Fixes 🐛
+
+- **line-height:** remove the calculation fomr line-height.body ([4cc666c](https://github.com/Kajabi/ds-tokens/commit/4cc666c))
+
+### ❤️ Thank You
+
+- Julian Skinner
+
 ## 0.0.2 (2025-04-23)
 
 This was a version bump only, there were no code changes.
