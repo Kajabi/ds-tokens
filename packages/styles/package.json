@@ -6,6 +6,7 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./tokens/*": "./dist/tokens/*",
     "./*": "./dist/*"
   },
   "files": [
@@ -33,7 +34,7 @@
   "scripts": {
     "clean": "rm -rf _generated",
     "generate": "npm run clean && node src/lib/transform/index.js",
-    "build": "npm run generate && vite build",
+    "build": "npm run generate && vite build && node scripts/copy-tokens.js",
     "lint": "npm run lint.eslint",
     "lint.eslint": "eslint src/lib/**/*"
   }
