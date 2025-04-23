@@ -1,3 +1,7 @@
+## 0.0.2 (2025-04-23)
+
+This was a version bump only, there were no code changes.
+
 ## 0.0.2-dev.0 (2025-04-23)
 
 ### Bug Fixes 🐛
