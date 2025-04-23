@@ -536,7 +536,7 @@
       "type": "lineHeights"
     },
     "body": {
-      "value": "{line-height.100} * 1.425",
+      "value": "1.425",
       "type": "lineHeights"
     }
   },

@@ -3,6 +3,7 @@
  */
 
 :root {
+  --pine-line-height-body: 1.425;
   --pine-border-radius-full: 9999px; /* this is to be used for rounded corners without specified dimensions */
   --pine-border-width: var(--pine-border-width-thin);
   --pine-box-shadow: var(--pine-box-shadow-100);
@@ -107,7 +108,6 @@
   --pine-font-weight-text-message: var(--pine-font-weight-400);
   --pine-line-height-text-message: var(--pine-line-height-125);
   --pine-line-height-heading: var(--pine-line-height-125);
-  --pine-line-height-body: var(--pine-line-height-100) * 1.425;
   --pine-dimension-none: var(--pine-dimension-0);
   --pine-dimension-2xs: var(--pine-dimension-050);
   --pine-dimension-xs: var(--pine-dimension-100);

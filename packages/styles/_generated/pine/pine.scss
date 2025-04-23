@@ -225,6 +225,7 @@
   --pine-line-height-025: 0.625;
   --pine-line-height-050: 0.78125;
   --pine-line-height-075: 0.9375;
+  --pine-line-height-body: 1.425;
   --pine-dimension-0: 0px;
   --pine-dimension-100: 8px;
   --pine-dimension-125: 10px;
@@ -358,7 +359,6 @@
   --pine-font-weight-text-message: var(--pine-font-weight-400);
   --pine-line-height-text-message: var(--pine-line-height-125);
   --pine-line-height-heading: var(--pine-line-height-125);
-  --pine-line-height-body: var(--pine-line-height-100) * 1.425;
   --pine-dimension-none: var(--pine-dimension-0);
   --pine-dimension-2xs: var(--pine-dimension-050);
   --pine-dimension-xs: var(--pine-dimension-100);
