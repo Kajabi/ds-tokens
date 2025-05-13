@@ -1,3 +1,13 @@
+## 0.1.0 (2025-05-13)
+
+### Features 🚀
+
+- **alert:** add alert component tokens ([#5](https://github.com/Kajabi/ds-tokens/pull/5))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 0.0.3 (2025-04-23)
 
 ### Bug Fixes 🐛
