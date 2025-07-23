@@ -1,3 +1,13 @@
+## 0.1.1 (2025-07-23)
+
+### Bug Fixes 🐛
+
+- add semantic background token for app background ([0220802](https://github.com/Kajabi/ds-tokens/commit/0220802))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 0.1.0 (2025-05-13)
 
 ### Features 🚀
