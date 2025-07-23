@@ -73,6 +73,12 @@
           "value": "{color.grey.050}",
           "type": "color"
         }
+      },
+      "app": {
+        "@": {
+          "value": "{color.grey.100}",
+          "type": "color"
+        }
       }
     },
     "border": {
