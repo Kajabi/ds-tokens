@@ -1,3 +1,13 @@
+## 0.2.0 (2025-10-06)
+
+### Features 🚀
+
+- **z-index:** add z-index tokens and semantic variables ([#12](https://github.com/Kajabi/ds-tokens/pull/12))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 0.1.1 (2025-07-23)
 
 ### Bug Fixes 🐛
