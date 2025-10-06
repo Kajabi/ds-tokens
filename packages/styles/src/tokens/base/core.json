@@ -1139,5 +1139,47 @@
       "value": "0.12px",
       "type": "letterSpacing"
     }
+  },
+  "z-index": {
+    "0": {
+      "value": "0",
+      "type": "other"
+    },
+    "1": {
+      "value": "1000",
+      "type": "other"
+    },
+    "2": {
+      "value": "2000",
+      "type": "other"
+    },
+    "3": {
+      "value": "3000",
+      "type": "other"
+    },
+    "4": {
+      "value": "4000",
+      "type": "other"
+    },
+    "5": {
+      "value": "5000",
+      "type": "other"
+    },
+    "6": {
+      "value": "6000",
+      "type": "other"
+    },
+    "8": {
+      "value": "8000",
+      "type": "other"
+    },
+    "9": {
+      "value": "9000",
+      "type": "other"
+    },
+    "n1": {
+      "value": "-1",
+      "type": "other"
+    }
   }
 }
