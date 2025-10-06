@@ -124,6 +124,16 @@
   --pine-letter-spacing-heading-4: var(--pine-letter-spacing-142);
   --pine-letter-spacing-heading-5: var(--pine-letter-spacing-128);
   --pine-letter-spacing-heading-6: var(--pine-letter-spacing-114);
+  --pine-z-index: var(--pine-z-index-0); /* Default stacking order */
+  --pine-z-index-hide: var(--pine-z-index-n1); /* Hidden behind other elements */
+  --pine-z-index-raised: var(--pine-z-index-1); /* Slightly raised above normal content */
+  --pine-z-index-alert: var(--pine-z-index-2); /* Alert messages and notifications */
+  --pine-z-index-underlay: var(--pine-z-index-3); /* Background overlays and backdrops */
+  --pine-z-index-navigation: var(--pine-z-index-4); /* Navigation elements like headers and sidebars */
+  --pine-z-index-overlay: var(--pine-z-index-5); /* Overlays like dropdowns and popovers */
+  --pine-z-index-modal: var(--pine-z-index-6); /* Modal dialogs and similar blocking UI */
+  --pine-z-index-priority: var(--pine-z-index-8); /* High priority elements that must appear above modals */
+  --pine-z-index-nuclear: var(--pine-z-index-9); /* Highest priority elements, use sparingly */
   --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
   --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-300);

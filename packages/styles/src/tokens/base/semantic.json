@@ -814,5 +814,57 @@
         "description": "Focus ring for danger/invalid states"
       }
     }
+  },
+  "z-index": {
+    "@": {
+      "value": "{z-index.0}",
+      "type": "other",
+      "description": "Default stacking order"
+    },
+    "hide": {
+      "value": "{z-index.n1}",
+      "type": "other",
+      "description": "Hidden behind other elements"
+    },
+    "raised": {
+      "value": "{z-index.1}",
+      "type": "other",
+      "description": "Slightly raised above normal content"
+    },
+    "alert": {
+      "value": "{z-index.2}",
+      "type": "other",
+      "description": "Alert messages and notifications"
+    },
+    "underlay": {
+      "value": "{z-index.3}",
+      "type": "other",
+      "description": "Background overlays and backdrops"
+    },
+    "navigation": {
+      "value": "{z-index.4}",
+      "type": "other",
+      "description": "Navigation elements like headers and sidebars"
+    },
+    "overlay": {
+      "value": "{z-index.5}",
+      "type": "other",
+      "description": "Overlays like dropdowns and popovers"
+    },
+    "modal": {
+      "value": "{z-index.6}",
+      "type": "other",
+      "description": "Modal dialogs and similar blocking UI"
+    },
+    "priority": {
+      "value": "{z-index.8}",
+      "type": "other",
+      "description": "High priority elements that must appear above modals"
+    },
+    "nuclear": {
+      "value": "{z-index.9}",
+      "type": "other",
+      "description": "Highest priority elements, use sparingly"
+    }
   }
 }
