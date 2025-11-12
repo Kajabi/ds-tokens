@@ -5,6 +5,9 @@
     "components/chip",
     "components/input",
     "components/select",
-    "kajabi_products"
+    "components/alert",
+    "kajabi_products",
+    "kajabi_products/light",
+    "kajabi_products/dark"
   ]
 }
