@@ -1,6 +1,18 @@
-## 0.3.0 (2025-11-17)
+## 0.2.1 (2025-11-17)
 
-This was a version bump only, there were no code changes.
+### Bug Fixes 🐛
+
+- update config to handle dark mode ([ce1e73e](https://github.com/Kajabi/ds-tokens/commit/ce1e73e))
+- removed in favor of dev workflow ([7f35eba](https://github.com/Kajabi/ds-tokens/commit/7f35eba))
+
+### Styles 🎨
+
+- add dark mode tokens ([1ead130](https://github.com/Kajabi/ds-tokens/commit/1ead130))
+
+### ❤️ Thank You
+
+- Kajabi Bot @dev-kjbot
+- Quinton Jason
 
 ## 0.2.0 (2025-10-06)
 
