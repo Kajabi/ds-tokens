@@ -1,10 +1,3 @@
-export const generateCoreFiles = () => [
-  {
-    destination: `base/_core.scss`,
-    format: 'css/variables',
-    filter: token => token.filePath.includes('base/core'),
-    options: {
-      outputReferences: true
-    }
-  }
-];
+// Core files are now generated directly in index.js with dark mode support
+// This file is kept for backward compatibility but returns empty array
+export const generateCoreFiles = () => [];

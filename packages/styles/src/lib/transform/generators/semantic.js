@@ -1,15 +1,3 @@
-export const generateSemanticFiles = () => {
-  const filesArr = [];
-
-  // Base semantic tokens (non-themeable)
-  filesArr.push({
-    destination: `base/_semantic.scss`,
-    format: 'css/variables',
-    filter: token => token.filePath.includes('base/semantic'),
-    options: {
-      outputReferences: true
-    }
-  });
-
-  return filesArr;
-};
+// Semantic files are now generated directly in index.js with dark mode support
+// This file is kept for backward compatibility but returns empty array
+export const generateSemanticFiles = () => [];
