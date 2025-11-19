@@ -136,6 +136,18 @@ StyleDictionary.registerFormat({
         return refToVar(refPath, prefix);
       }
 
+      // Check if the original value contains a reference with operations (e.g., "{letter-spacing.114} * -1")
+      if (typeof originalValue === 'string' && originalValue.includes('{') && originalValue.includes('}')) {
+        // Extract the reference and any operations
+        const refMatch = originalValue.match(/\{([^}]+)\}/);
+        if (refMatch) {
+          const refPath = refMatch[1];
+          const varRef = refToVar(refPath, prefix);
+          // Replace the reference in the original string with the CSS variable
+          return originalValue.replace(/\{[^}]+\}/, varRef);
+        }
+      }
+
       // If not a reference, use the resolved value
       return token.value;
     };

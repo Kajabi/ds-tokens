@@ -366,7 +366,7 @@
   --pine-letter-spacing-185: 0.26px;
   --pine-letter-spacing-078: 0.11px;
   --pine-letter-spacing-085: 0.12px;
-  --pine-letter-spacing: -0.16px;
+  --pine-letter-spacing: var(--pine-letter-spacing-114) * -1;
   --pine-letter-spacing-heading-1: var(--pine-letter-spacing-185);
   --pine-letter-spacing-heading-2: var(--pine-letter-spacing-171);
   --pine-letter-spacing-heading-3: var(--pine-letter-spacing-157);
