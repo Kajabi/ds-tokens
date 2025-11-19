@@ -229,14 +229,13 @@ async function run() {
     return !Object.values(themes).every(sets => sets.includes(set));
 	});
 
-  // Base configuration for core files with light and dark mode support
-  // Process light and dark separately to avoid token collisions, then combine in format
+  // Base configuration for core files (now in brand/core.json, no dark mode variants)
   const coreConfigLight = {
     log: {
       verbosity: 'verbose',
     },
     source: [
-      `${basePath}/core/light.json`
+      `${basePath}/brand/core.json`
     ],
     preprocessors: ['tokens-studio'],
     platforms: {
@@ -248,7 +247,7 @@ async function run() {
           {
             destination: `base/_core.scss`,
             format: 'css/variables-with-dark-mode',
-            filter: token => token.filePath.includes('core/light'),
+            filter: token => token.filePath.includes('brand/core'),
             options: {
               outputReferences: true,
               prefix: 'pine',
@@ -261,36 +260,8 @@ async function run() {
     },
   };
 
-  const coreConfigDark = {
-    log: {
-      verbosity: 'verbose',
-    },
-    source: [
-      `${basePath}/core/light.json`, // Include light for reference resolution
-      `${basePath}/core/dark.json`
-    ],
-    preprocessors: ['tokens-studio'],
-    platforms: {
-      css: {
-        transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
-        buildPath: buildPath,
-        files: [
-          {
-            destination: `base/_core-dark.scss`,
-            format: 'css/variables-with-dark-mode',
-            filter: token => token.filePath.includes('core/dark'),
-            options: {
-              outputReferences: true,
-              prefix: 'pine',
-              mode: 'dark'
-            }
-          }
-        ],
-        prefix: 'pine'
-      },
-    },
-  };
+  // Dark core config removed - core tokens no longer have dark mode variants
+  // Only semantic tokens have dark mode variants now
 
   // Base configuration for semantic files with light and dark mode support
   // Include core files for reference resolution
@@ -300,7 +271,7 @@ async function run() {
       verbosity: 'verbose',
     },
     source: [
-      `${basePath}/core/light.json`,
+      `${basePath}/brand/core.json`, // Core tokens for reference resolution
       `${basePath}/semantic/light.json`
     ],
     preprocessors: ['tokens-studio'],
@@ -331,8 +302,7 @@ async function run() {
       verbosity: 'verbose',
     },
     source: [
-      `${basePath}/core/light.json`, // Include for reference resolution
-      `${basePath}/core/dark.json`,
+      `${basePath}/brand/core.json`, // Core tokens for reference resolution (no dark core tokens)
       `${basePath}/semantic/light.json`, // Include for reference resolution
       `${basePath}/semantic/dark.json`
     ],
@@ -361,13 +331,13 @@ async function run() {
 
   // Component-specific configuration
   // Components have light/dark variants, so we need to handle them per theme
+  // Note: core tokens no longer have dark mode variants
   const componentConfig = {
     log: {
       verbosity: 'verbose',
     },
     source: [
-      `${basePath}/core/light.json`,
-      `${basePath}/core/dark.json`,
+      `${basePath}/brand/core.json`, // Core tokens for reference resolution
       `${basePath}/semantic/light.json`,
       `${basePath}/semantic/dark.json`,
       `${basePath}/components/**/*.json`
@@ -413,7 +383,7 @@ async function run() {
   Object.entries(brandGroups).forEach(([brandName, { light, dark }]) => {
     // Light mode config
     const lightSourceFiles = [];
-    lightSourceFiles.push(`${basePath}/core/light.json`);
+    lightSourceFiles.push(`${basePath}/brand/core.json`); // Core tokens
     lightSourceFiles.push(`${basePath}/semantic/light.json`);
 
     if (light) {
@@ -428,9 +398,9 @@ async function run() {
     }
 
     // Dark mode config (include light for reference resolution)
+    // Note: core tokens no longer have dark mode variants, only semantic tokens do
     const darkSourceFiles = [];
-    darkSourceFiles.push(`${basePath}/core/light.json`);
-    darkSourceFiles.push(`${basePath}/core/dark.json`);
+    darkSourceFiles.push(`${basePath}/brand/core.json`); // Core tokens for reference resolution
     darkSourceFiles.push(`${basePath}/semantic/light.json`);
     darkSourceFiles.push(`${basePath}/semantic/dark.json`);
 
@@ -485,7 +455,7 @@ async function run() {
 
         // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
         // Include core tokens
-        if (filePath.includes('core/light')) return true;
+        if (filePath.includes('brand/core')) return true;
         // Include semantic tokens
         if (filePath.includes('semantic/light')) return true;
         // Include brand-specific tokens
@@ -503,12 +473,11 @@ async function run() {
       (token) => {
         const filePath = token.filePath || '';
 
-        // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
-        // Include core tokens
-        if (filePath.includes('core/dark')) return true;
-        // Include semantic tokens
+        // For both pine and kajabi_products brands, include semantic and component dark tokens
+        // Note: core tokens no longer have dark mode variants
+        // Include semantic dark tokens
         if (filePath.includes('semantic/dark')) return true;
-        // Include component tokens
+        // Include component dark tokens
         if (filePath.includes('components/') && filePath.includes('/dark')) return true;
         return false;
       }
@@ -517,9 +486,8 @@ async function run() {
 
   const themeConfigs = brandConfigs;
 
-  // Build core files (light and dark separately)
+  // Build core files (light only - no dark mode variants)
   const coreSdLight = new StyleDictionary(coreConfigLight);
-  const coreSdDark = new StyleDictionary(coreConfigDark);
 
   // Build semantic files (light and dark separately)
   const semanticSdLight = new StyleDictionary(semanticConfigLight);
@@ -532,7 +500,7 @@ async function run() {
   const themeSds = themeConfigs.map(config => new StyleDictionary(config));
 
   // Register transform for all configurations
-  const allSds = [coreSdLight, coreSdDark, semanticSdLight, semanticSdDark, componentSd, ...themeSds];
+  const allSds = [coreSdLight, semanticSdLight, semanticSdDark, componentSd, ...themeSds];
   for (const sd of allSds) {
     sd.registerTransform({
       name: "attribute/themeable",
@@ -576,27 +544,13 @@ async function run() {
   // Build all platforms in order
   // Build light first to temp files, then dark to temp files, then combine
   await coreSdLight.buildAllPlatforms();
-  await coreSdDark.buildAllPlatforms();
   await semanticSdLight.buildAllPlatforms();
   await semanticSdDark.buildAllPlatforms();
 
-  // Combine light and dark outputs for core and semantic files
-  const coreLightPath = resolve(buildPath, 'base/_core.scss');
-  const coreDarkPath = resolve(buildPath, 'base/_core-dark.scss');
+  // Combine light and dark outputs for semantic files
+  // Note: core files no longer have dark mode variants, so only semantic files are combined
   const semanticLightPath = resolve(buildPath, 'base/_semantic.scss');
   const semanticDarkPath = resolve(buildPath, 'base/_semantic-dark.scss');
-
-  try {
-    // Combine core files
-    const coreLightContent = await fs.readFile(coreLightPath, 'utf-8');
-    const coreDarkContent = await fs.readFile(coreDarkPath, 'utf-8');
-    // Remove header from dark content and combine
-    const coreDarkWithoutHeader = coreDarkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
-    await fs.writeFile(coreLightPath, coreLightContent.trim() + '\n\n' + coreDarkWithoutHeader.trim() + '\n');
-    await fs.unlink(coreDarkPath);
-  } catch (e) {
-    console.warn('Could not combine core files:', e.message);
-  }
 
   try {
     // Combine semantic files
