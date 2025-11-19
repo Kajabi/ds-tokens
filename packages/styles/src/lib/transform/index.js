@@ -50,12 +50,15 @@ StyleDictionary.registerFormat({
         const originalPath = token.original?.filePath || filePath;
         const checkPath = originalPath || filePath;
 
-        // Exclude dark tokens
-        return !(checkPath.includes('/dark.json') ||
-                 checkPath.includes('/dark/') ||
-                 checkPath.endsWith('dark.json') ||
-                 checkPath.match(/\/dark(\.json)?$/i) ||
-                 checkPath.match(/dark\.json/i));
+        // Exclude dark tokens - check for dark in path
+        const isDark = checkPath.includes('/dark.json') ||
+                       checkPath.includes('/dark/') ||
+                       checkPath.endsWith('dark.json') ||
+                       checkPath.match(/\/dark(\.json)?$/i) ||
+                       checkPath.match(/dark\.json/i);
+
+        // If it's not dark, it's light (or neutral like brand tokens)
+        return !isDark;
       });
 
       if (lightTokens.length > 0) {
@@ -339,47 +342,73 @@ async function run() {
   };
 
   // Theme-specific configuration
-  // Each theme is structured as {brand}-{mode} (e.g., kajabi_products-light, pine-dark)
-  // These handle brand-specific tokens only (not core/semantic which are handled above)
-  const themeConfigs = Object.entries(themes).map(([theme, tokensets]) => {
-    // Extract brand and mode from theme name
+  // Group themes by brand and combine light/dark into single files
+  // kajabi_products-light + kajabi_products-dark → kajabi_products/kajabi_products.scss
+  // pine-light + pine-dark → pine/pine.scss
+  const brandGroups = {};
+  Object.entries(themes).forEach(([theme, tokensets]) => {
     const themeParts = theme.toLowerCase().split('-');
     const brandName = themeParts[0];
-    const modeName = themeParts.slice(1).join('-') || null;
+    const modeName = themeParts.slice(1).join('-');
 
-    // Determine file destination
-    // Both kajabi_products and pine files go in their respective brand folders
-    let fileDestination;
-    if (brandName === 'kajabi_products' || brandName === 'pine') {
-      fileDestination = `${brandName}/${modeName}.scss`;
-    } else {
-      fileDestination = `${theme}/${theme}.scss`;
+    if (!brandGroups[brandName]) {
+      brandGroups[brandName] = {
+        light: null,
+        dark: null
+      };
     }
 
-    // Build source files - only include brand-specific and component tokens for this mode
-    const sourceFiles = [];
+    if (modeName === 'light') {
+      brandGroups[brandName].light = tokensets;
+    } else if (modeName === 'dark') {
+      brandGroups[brandName].dark = tokensets;
+    }
+  });
 
-    // Include core and semantic for reference resolution
-    sourceFiles.push(`${basePath}/core/light.json`);
-    sourceFiles.push(`${basePath}/core/dark.json`);
-    sourceFiles.push(`${basePath}/semantic/light.json`);
-    sourceFiles.push(`${basePath}/semantic/dark.json`);
+  // Process each brand with light and dark separately, then combine
+  const brandConfigs = [];
+  Object.entries(brandGroups).forEach(([brandName, { light, dark }]) => {
+    // Light mode config
+    const lightSourceFiles = [];
+    lightSourceFiles.push(`${basePath}/core/light.json`);
+    lightSourceFiles.push(`${basePath}/semantic/light.json`);
 
-    // Add brand-specific tokens
-    tokensets.forEach(set => {
-      if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/')) {
-        sourceFiles.push(`${basePath}/${set}.json`);
-      }
-      // Add component tokens for this mode
-      if (set.includes('components/') && modeName && set.includes(`/${modeName}`)) {
-        sourceFiles.push(`${basePath}/${set}.json`);
-      }
-    });
+    if (light) {
+      light.forEach(set => {
+        if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/')) {
+          lightSourceFiles.push(`${basePath}/${set}.json`);
+        }
+        if (set.includes('components/') && set.includes('/light')) {
+          lightSourceFiles.push(`${basePath}/${set}.json`);
+        }
+      });
+    }
 
-    return {
-      log: {
-        verbosity: 'verbose',
-      },
+    // Dark mode config (include light for reference resolution)
+    const darkSourceFiles = [];
+    darkSourceFiles.push(`${basePath}/core/light.json`);
+    darkSourceFiles.push(`${basePath}/core/dark.json`);
+    darkSourceFiles.push(`${basePath}/semantic/light.json`);
+    darkSourceFiles.push(`${basePath}/semantic/dark.json`);
+
+    if (light) {
+      light.forEach(set => {
+        if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/')) {
+          darkSourceFiles.push(`${basePath}/${set}.json`);
+        }
+      });
+    }
+
+    if (dark) {
+      dark.forEach(set => {
+        if (set.includes('components/') && set.includes('/dark')) {
+          darkSourceFiles.push(`${basePath}/${set}.json`);
+        }
+      });
+    }
+
+    const createConfig = (sourceFiles, mode, filterFn) => ({
+      log: { verbosity: 'verbose' },
       source: sourceFiles,
       preprocessors: ['tokens-studio'],
       platforms: {
@@ -387,53 +416,63 @@ async function run() {
           transformGroup: 'tokens-studio',
           transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
           buildPath: buildPath,
-          files: [
-            {
-              destination: fileDestination,
-              format: 'css/variables-with-dark-mode',
-              filter: (token) => {
-                const filePath = token.filePath || '';
-
-                // Exclude core and semantic (handled separately)
-                if (filePath.includes('core/') || filePath.includes('semantic/')) {
-                  return false;
-                }
-
-                // Include brand-specific tokens
-                if (filePath.includes(`${brandName}.json`) ||
-                    (filePath.includes(`${brandName}/`) && !filePath.includes('/light') && !filePath.includes('/dark'))) {
-                  return true;
-                }
-
-                // Include component tokens for this mode
-                if (modeName && filePath.includes(`components/`) && filePath.includes(`/${modeName}`)) {
-                  return true;
-                }
-
-                // Include themeable tokens that match this brand
-                if (token.attributes?.themeable) {
-                  const tokenSet = filePath
-                    .replace(new RegExp(`^${basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/`), '')
-                    .replace(/\.json$/, '');
-
-                  if (tokensets.includes(tokenSet) && !tokenSet.includes('core/') && !tokenSet.includes('semantic/')) {
-                    return true;
-                  }
-                }
-
-                return false;
-              },
-              options: {
-                outputReferences: true,
-                prefix: 'pine'
-              }
+          files: [{
+            destination: mode === 'light'
+              ? `${brandName}/${brandName}.scss`
+              : `${brandName}/${brandName}-dark.scss`,
+            format: 'css/variables-with-dark-mode',
+            filter: filterFn,
+            options: {
+              outputReferences: true,
+              prefix: 'pine',
+              mode: mode
             }
-          ],
+          }],
           prefix: 'pine'
-        },
-      },
-    };
+        }
+      }
+    });
+
+    // Light config
+    brandConfigs.push(createConfig(
+      lightSourceFiles,
+      'light',
+      (token) => {
+        const filePath = token.filePath || '';
+
+        // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
+        // Include core tokens
+        if (filePath.includes('core/light')) return true;
+        // Include semantic tokens
+        if (filePath.includes('semantic/light')) return true;
+        // Include brand-specific tokens
+        if (filePath.includes(`${brandName}.json`)) return true;
+        // Include component tokens
+        if (filePath.includes('components/') && filePath.includes('/light')) return true;
+        return false;
+      }
+    ));
+
+    // Dark config
+    brandConfigs.push(createConfig(
+      darkSourceFiles,
+      'dark',
+      (token) => {
+        const filePath = token.filePath || '';
+
+        // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
+        // Include core tokens
+        if (filePath.includes('core/dark')) return true;
+        // Include semantic tokens
+        if (filePath.includes('semantic/dark')) return true;
+        // Include component tokens
+        if (filePath.includes('components/') && filePath.includes('/dark')) return true;
+        return false;
+      }
+    ));
   });
+
+  const themeConfigs = brandConfigs;
 
   // Build core files (light and dark separately)
   const coreSdLight = new StyleDictionary(coreConfigLight);
@@ -529,8 +568,28 @@ async function run() {
   }
 
   await componentSd.buildAllPlatforms();
+
+  // Build theme files (light and dark separately)
   for (const themeSd of themeSds) {
     await themeSd.buildAllPlatforms();
+  }
+
+  // Combine light and dark brand files
+  for (const brandName of ['kajabi_products', 'pine']) {
+    const lightPath = resolve(buildPath, `${brandName}/${brandName}.scss`);
+    const darkPath = resolve(buildPath, `${brandName}/${brandName}-dark.scss`);
+    const finalPath = resolve(buildPath, `${brandName}/${brandName}.scss`);
+
+    try {
+      const lightContent = await fs.readFile(lightPath, 'utf-8');
+      const darkContent = await fs.readFile(darkPath, 'utf-8');
+      // Remove header from dark content and combine
+      const darkWithoutHeader = darkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
+      await fs.writeFile(finalPath, lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n');
+      await fs.unlink(darkPath);
+    } catch (e) {
+      console.warn(`Could not combine ${brandName} files:`, e.message);
+    }
   }
 }
 
