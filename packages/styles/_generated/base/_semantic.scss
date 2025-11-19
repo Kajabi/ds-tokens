@@ -77,6 +77,7 @@
   --pine-color-warning: var(--pine-color-yellow-500);
   --pine-color-warning-disabled: var(--pine-color-yellow-100);
   --pine-color-warning-hover: var(--pine-color-yellow-600);
+  --pine-color-brand: var(--pine-color-black);
   --pine-font-family-heading: var(--pine-font-family-greet);
   --pine-font-family-body: var(--pine-font-family-inter);
   --pine-font-size: var(--pine-font-size-100);
@@ -234,6 +235,7 @@
     --pine-color-warning: var(--pine-color-yellow-500);
     --pine-color-warning-disabled: var(--pine-color-yellow-100);
     --pine-color-warning-hover: var(--pine-color-yellow-600);
+    --pine-color-brand: var(--pine-color-black);
   }
 }
 
@@ -310,4 +312,5 @@
   --pine-color-warning: var(--pine-color-yellow-500);
   --pine-color-warning-disabled: var(--pine-color-yellow-100);
   --pine-color-warning-hover: var(--pine-color-yellow-600);
+  --pine-color-brand: var(--pine-color-black);
 }

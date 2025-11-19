@@ -257,6 +257,7 @@
   --pine-color-warning: var(--pine-color-yellow-500);
   --pine-color-warning-disabled: var(--pine-color-yellow-100);
   --pine-color-warning-hover: var(--pine-color-yellow-600);
+  --pine-color-brand: var(--pine-color-black);
   --pine-font-family-greet: 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-font-family-greet-condensed: 'Greet Condensed', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-font-family-inter: 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
@@ -495,6 +496,7 @@
     --pine-color-warning: var(--pine-color-yellow-500);
     --pine-color-warning-disabled: var(--pine-color-yellow-100);
     --pine-color-warning-hover: var(--pine-color-yellow-600);
+    --pine-color-brand: var(--pine-color-black);
   }
 }
 
@@ -571,4 +573,5 @@
   --pine-color-warning: var(--pine-color-yellow-500);
   --pine-color-warning-disabled: var(--pine-color-yellow-100);
   --pine-color-warning-hover: var(--pine-color-yellow-600);
+  --pine-color-brand: var(--pine-color-black);
 }
