@@ -22,8 +22,8 @@ export const generateComponentFiles = () => {
       format,
       filter: (token) => {
         const filePath = token.filePath || '';
-        return filePath.includes(`components/${comp}/light.json`) ||
-               filePath.includes(`components/${comp}/light/`);
+        // Match component files like components/alert.json
+        return filePath.includes(`components/${comp}.json`);
       },
       options: {
         selector: ":host",

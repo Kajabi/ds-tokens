@@ -25,16 +25,33 @@ StyleDictionary.registerFormat({
       return name.replace(/[^a-zA-Z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     };
 
+    // Helper to convert a reference path to CSS variable name
+    const refToVar = (refPath, prefix) => {
+      const varName = sanitizeName(refPath.split('.').join('-'));
+      return `var(--${prefix}-${varName})`;
+    };
+
     // Helper to convert token references to CSS variable references
     const formatTokenValue = (token, prefix) => {
       const originalValue = token.original?.value || token.value;
 
-      // Check if the original value is a reference (starts with {)
+      // Check if the original value is a simple string reference (starts with {)
       if (typeof originalValue === 'string' && originalValue.startsWith('{') && originalValue.endsWith('}')) {
         // Convert {color.purple.500} to var(--pine-color-purple-500)
         const refPath = originalValue.slice(1, -1); // Remove { and }
-        const varName = sanitizeName(refPath.split('.').join('-'));
-        return `var(--${prefix}-${varName})`;
+        return refToVar(refPath, prefix);
+      }
+
+      // Check if the original value contains a reference with operations (e.g., "{letter-spacing.114} * -1")
+      if (typeof originalValue === 'string' && originalValue.includes('{') && originalValue.includes('}')) {
+        // Extract the reference and any operations
+        const refMatch = originalValue.match(/\{([^}]+)\}/);
+        if (refMatch) {
+          const refPath = refMatch[1];
+          const varRef = refToVar(refPath, prefix);
+          // Replace the reference in the original string with the CSS variable
+          return originalValue.replace(/\{[^}]+\}/, varRef);
+        }
       }
 
       // If not a reference, use the resolved value
@@ -46,7 +63,7 @@ StyleDictionary.registerFormat({
 
     allTokens.forEach(token => {
       const name = sanitizeName(token.path.join('-'));
-      const value = formatTokenValue(token, prefix, { allTokens });
+      const value = formatTokenValue(token, prefix);
       output += `  --${prefix}-${name}: ${value};\n`;
     });
 
