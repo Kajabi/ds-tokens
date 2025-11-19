@@ -339,6 +339,12 @@
         "value": "{color.yellow.600}",
         "type": "color"
       }
+    },
+    "brand": {
+      "@": {
+        "value": "{color.black}",
+        "type": "color"
+      }
     }
   }
 }
