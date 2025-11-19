@@ -1,7 +1,7 @@
 import { register, permutateThemes } from '@tokens-studio/sd-transforms';
 import { generateCoreFiles, generateComponentFiles, generateSemanticFiles } from './generators/index.js';
 import StyleDictionary from 'style-dictionary';
-import { getReferences, usesReferences } from "style-dictionary/utils";
+import { getReferences, usesReferences, outputReferencesTransformed } from "style-dictionary/utils";
 import { promises as fs } from 'fs';
 import { resolve } from 'path';
 import { basePath } from './utils.js';
@@ -46,7 +46,7 @@ StyleDictionary.registerFormat({
 
     allTokens.forEach(token => {
       const name = sanitizeName(token.path.join('-'));
-      const value = formatTokenValue(token, prefix);
+      const value = formatTokenValue(token, prefix, { allTokens });
       output += `  --${prefix}-${name}: ${value};\n`;
     });
 
@@ -68,16 +68,72 @@ StyleDictionary.registerFormat({
       return name.replace(/[^a-zA-Z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     };
 
+    // Helper to convert a reference path to CSS variable name
+    const refToVar = (refPath, prefix) => {
+      const varName = sanitizeName(refPath.split('.').join('-'));
+      return `var(--${prefix}-${varName})`;
+    };
+
     // Helper to convert token references to CSS variable references
     const formatTokenValue = (token, prefix) => {
       const originalValue = token.original?.value || token.value;
 
-      // Check if the original value is a reference (starts with {)
+      // Handle typography tokens (composite tokens with object values)
+      if (token.type === 'typography' && typeof originalValue === 'object' && originalValue !== null) {
+        // Build typography shorthand with CSS variable references
+        const parts = [];
+
+        // fontWeight
+        if (originalValue.fontWeight) {
+          const fwRef = originalValue.fontWeight.replace(/[{}]/g, '');
+          parts.push(refToVar(fwRef, prefix));
+        }
+
+        // fontSize / lineHeight
+        if (originalValue.fontSize && originalValue.lineHeight) {
+          const fsRef = originalValue.fontSize.replace(/[{}]/g, '');
+          const lhRef = originalValue.lineHeight.replace(/[{}]/g, '').replace(/\s*\*\s*100%/, '');
+          parts.push(`${refToVar(fsRef, prefix)}/${refToVar(lhRef, prefix)}`);
+        } else if (originalValue.fontSize) {
+          const fsRef = originalValue.fontSize.replace(/[{}]/g, '');
+          parts.push(refToVar(fsRef, prefix));
+        }
+
+        // fontFamily
+        if (originalValue.fontFamily) {
+          const ffRef = originalValue.fontFamily.replace(/[{}]/g, '');
+          parts.push(refToVar(ffRef, prefix));
+        }
+
+        return parts.join(' ');
+      }
+
+      // Handle border tokens (composite tokens with object values)
+      if (token.type === 'border' && typeof originalValue === 'object' && originalValue !== null) {
+        const parts = [];
+
+        if (originalValue.width) {
+          const widthRef = originalValue.width.replace(/[{}]/g, '');
+          parts.push(refToVar(widthRef, prefix));
+        }
+
+        if (originalValue.style) {
+          parts.push(originalValue.style);
+        }
+
+        if (originalValue.color) {
+          const colorRef = originalValue.color.replace(/[{}]/g, '');
+          parts.push(refToVar(colorRef, prefix));
+        }
+
+        return parts.join(' ');
+      }
+
+      // Check if the original value is a simple string reference (starts with {)
       if (typeof originalValue === 'string' && originalValue.startsWith('{') && originalValue.endsWith('}')) {
         // Convert {color.purple.500} to var(--pine-color-purple-500)
         const refPath = originalValue.slice(1, -1); // Remove { and }
-        const varName = sanitizeName(refPath.split('.').join('-'));
-        return `var(--${prefix}-${varName})`;
+        return refToVar(refPath, prefix);
       }
 
       // If not a reference, use the resolved value
