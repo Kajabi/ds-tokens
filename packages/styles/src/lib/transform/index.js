@@ -12,6 +12,49 @@ register(StyleDictionary, {
 
 const buildPath = `_generated/`;
 
+// Custom format for component CSS variables with :host selector
+StyleDictionary.registerFormat({
+  name: 'css/variables-host',
+  format: function({ dictionary, options }) {
+    const prefix = options.prefix || 'pine';
+    const selector = options.selector || ':host';
+    const allTokens = dictionary.allTokens;
+
+    // Helper to sanitize CSS variable names
+    const sanitizeName = (name) => {
+      return name.replace(/[^a-zA-Z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    };
+
+    // Helper to convert token references to CSS variable references
+    const formatTokenValue = (token, prefix) => {
+      const originalValue = token.original?.value || token.value;
+
+      // Check if the original value is a reference (starts with {)
+      if (typeof originalValue === 'string' && originalValue.startsWith('{') && originalValue.endsWith('}')) {
+        // Convert {color.purple.500} to var(--pine-color-purple-500)
+        const refPath = originalValue.slice(1, -1); // Remove { and }
+        const varName = sanitizeName(refPath.split('.').join('-'));
+        return `var(--${prefix}-${varName})`;
+      }
+
+      // If not a reference, use the resolved value
+      return token.value;
+    };
+
+    let output = '/**\n * Do not edit directly, this file was auto-generated.\n */\n\n';
+    output += `${selector} {\n`;
+
+    allTokens.forEach(token => {
+      const name = sanitizeName(token.path.join('-'));
+      const value = formatTokenValue(token, prefix);
+      output += `  --${prefix}-${name}: ${value};\n`;
+    });
+
+    output += '}\n';
+    return output;
+  }
+});
+
 // Custom format for CSS variables with dark mode support via media queries
 StyleDictionary.registerFormat({
   name: 'css/variables-with-dark-mode',
