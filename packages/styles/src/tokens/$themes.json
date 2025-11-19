@@ -21,10 +21,9 @@
     },
     "selectedTokenSets": {
       "kajabi_products": "enabled",
-      "core/light": "source",
-      "core/dark": "source",
       "semantic/light": "source",
-      "semantic/dark": "source"
+      "semantic/dark": "source",
+      "brand/core": "source"
     },
     "$figmaCollectionId": "VariableCollectionId:9922:1014",
     "$figmaModeId": "9922:18",
@@ -39,7 +38,7 @@
     "selectedTokenSets": {
       "kajabi_products": "enabled",
       "semantic/light": "enabled",
-      "core/light": "enabled"
+      "brand/core": "enabled"
     },
     "$figmaStyleReferences": {},
     "$figmaVariableReferences": {
@@ -297,7 +296,7 @@
     "selectedTokenSets": {
       "kajabi_products": "enabled",
       "semantic/dark": "enabled",
-      "core/dark": "enabled"
+      "brand/core": "enabled"
     },
     "$figmaStyleReferences": {},
     "$figmaVariableReferences": {
@@ -555,11 +554,11 @@
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "semantic/light": "enabled",
-      "core/light": "enabled",
-      "components/input/light": "enabled",
-      "components/select/light": "enabled",
-      "components/chip/light": "enabled",
-      "components/alert/light": "enabled"
+      "components/alert": "enabled",
+      "components/select": "enabled",
+      "components/input": "enabled",
+      "components/chip": "enabled",
+      "brand/core": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:9954:2414",
     "$figmaModeId": "9954:21",
@@ -865,11 +864,7 @@
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "semantic/dark": "enabled",
-      "core/dark": "enabled",
-      "components/chip/dark": "enabled",
-      "components/select/dark": "enabled",
-      "components/input/dark": "enabled",
-      "components/alert/dark": "enabled"
+      "brand/core": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:9954:2414",
     "$figmaModeId": "9954:22",

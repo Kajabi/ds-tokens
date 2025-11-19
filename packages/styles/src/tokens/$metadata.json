@@ -1,17 +1,12 @@
 {
   "tokenSetOrder": [
-    "core/light",
-    "core/dark",
+    "brand/core",
     "semantic/light",
     "semantic/dark",
-    "components/chip/light",
-    "components/chip/dark",
-    "components/input/light",
-    "components/input/dark",
-    "components/select/light",
-    "components/select/dark",
-    "components/alert/light",
-    "components/alert/dark",
+    "components/chip",
+    "components/input",
+    "components/select",
+    "components/alert",
     "kajabi_products"
   ]
 }
