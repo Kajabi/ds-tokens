@@ -1,4 +1,30 @@
 {
+  "border": {
+    "@": {
+      "value": {
+        "color": "{color.grey.600}",
+        "width": "{border-width.thin}",
+        "style": "solid"
+      },
+      "type": "border"
+    },
+    "hover": {
+      "value": {
+        "color": "{color.grey.400}",
+        "width": "{border-width.thin}",
+        "style": "solid"
+      },
+      "type": "border"
+    },
+    "none": {
+      "value": {
+        "color": "{color.grey.600}",
+        "width": "{border-width.none}",
+        "style": "solid"
+      },
+      "type": "border"
+    }
+  },
   "color": {
     "accent": {
       "@": {
