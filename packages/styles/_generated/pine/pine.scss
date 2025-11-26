@@ -497,6 +497,9 @@
     --pine-color-warning-disabled: var(--pine-color-yellow-100);
     --pine-color-warning-hover: var(--pine-color-yellow-600);
     --pine-color-brand: var(--pine-color-black);
+    --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-600);
+    --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+    --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-600);
   }
 }
 
@@ -574,4 +577,7 @@
   --pine-color-warning-disabled: var(--pine-color-yellow-100);
   --pine-color-warning-hover: var(--pine-color-yellow-600);
   --pine-color-brand: var(--pine-color-black);
+  --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-600);
+  --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+  --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-600);
 }
