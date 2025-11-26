@@ -1,3 +1,36 @@
+## 0.3.1 (2025-11-26)
+
+### Bug Fixes 🐛
+
+- update config to handle dark mode ([0601501](https://github.com/Kajabi/ds-tokens/commit/0601501))
+- removed in favor of dev workflow ([b4a54c4](https://github.com/Kajabi/ds-tokens/commit/b4a54c4))
+- restructure token sets and variables ([7ee2602](https://github.com/Kajabi/ds-tokens/commit/7ee2602))
+- update token file structure ([dc86bb9](https://github.com/Kajabi/ds-tokens/commit/dc86bb9))
+- combined dark and light into single file ([7e8c330](https://github.com/Kajabi/ds-tokens/commit/7e8c330))
+- add typography and other tokens to semantic ([c4c0c0c](https://github.com/Kajabi/ds-tokens/commit/c4c0c0c))
+- add semantic tokens ([441690c](https://github.com/Kajabi/ds-tokens/commit/441690c))
+- update component tokens ([f065121](https://github.com/Kajabi/ds-tokens/commit/f065121))
+- restructure token set to only nest semantic light and dark ([4e9c324](https://github.com/Kajabi/ds-tokens/commit/4e9c324))
+- added typography ([cffb48f](https://github.com/Kajabi/ds-tokens/commit/cffb48f))
+- updated transform to match new token structure ([8e0f0e7](https://github.com/Kajabi/ds-tokens/commit/8e0f0e7))
+- add missing semantic tokens ([2542221](https://github.com/Kajabi/ds-tokens/commit/2542221))
+- resolve typography tokens not having semantic tokens ([c5b6841](https://github.com/Kajabi/ds-tokens/commit/c5b6841))
+- add semantic brand token ([4c55af1](https://github.com/Kajabi/ds-tokens/commit/4c55af1))
+- add letter spacing ([3b0c844](https://github.com/Kajabi/ds-tokens/commit/3b0c844))
+- add semantic brand ([84c3b58](https://github.com/Kajabi/ds-tokens/commit/84c3b58))
+- add component files ([d587b9e](https://github.com/Kajabi/ds-tokens/commit/d587b9e))
+- add dark mode border tokens ([f1c405a](https://github.com/Kajabi/ds-tokens/commit/f1c405a))
+- add border dark mode tokens ([136b2af](https://github.com/Kajabi/ds-tokens/commit/136b2af))
+
+### Styles 🎨
+
+- add dark mode tokens ([aec6d88](https://github.com/Kajabi/ds-tokens/commit/aec6d88))
+
+### ❤️ Thank You
+
+- Kajabi Bot @dev-kjbot
+- Quinton Jason
+
 ## 0.3.0 (2025-11-17)
 
 This was a version bump only, there were no code changes.
