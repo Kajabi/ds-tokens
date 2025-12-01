@@ -228,16 +228,6 @@ StyleDictionary.registerFormat({
         if (mode === 'all' && output) {
           output += '\n';
         }
-        output += '@media (prefers-color-scheme: dark) {\n';
-        output += '  :root {\n';
-        darkTokens.forEach(token => {
-          const name = sanitizeName(token.path.join('-'));
-          const value = formatTokenValue(token, prefix);
-          output += `    --${prefix}-${name}: ${value};\n`;
-        });
-        output += '  }\n';
-        output += '}\n\n';
-
         output += '[data-theme="dark"] {\n';
         darkTokens.forEach(token => {
           const name = sanitizeName(token.path.join('-'));
