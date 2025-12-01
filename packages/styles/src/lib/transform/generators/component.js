@@ -4,7 +4,7 @@ import { componentFilter } from "../filters/index.js";
 import { basePath } from "../utils.js";
 
 const componentPrefix = 'pds';
-const format = "css/variables";
+const format = "css/variables-host";
 
 // for each component, filter those specific component tokens and output them
 // to the component folder where the component source code will live
@@ -17,13 +17,18 @@ export const generateComponentFiles = () => {
   for (const comp of components) {
     const componentName = `${componentPrefix}-${comp}`;
 
-    // Component-specific tokens at host level
+    // Component-specific tokens at host level (light mode)
     filesArr.push({
       format,
-      filter: componentFilter(comp),
+      filter: (token) => {
+        const filePath = token.filePath || '';
+        // Match component files like components/alert.json
+        return filePath.includes(`components/${comp}.json`);
+      },
       options: {
         selector: ":host",
-        outputReferences: outputReferencesTransformed,
+        prefix: 'pine',
+        outputReferences: true,
       },
       destination: `pine/components/${componentName}/${componentName}.tokens.scss`,
     });
