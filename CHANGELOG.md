@@ -1,3 +1,13 @@
+## 0.3.2-0 (2025-12-01)
+
+### Bug Fixes 🐛
+
+- remove prefers media query in favor of data theme ([c81313a](https://github.com/Kajabi/ds-tokens/commit/c81313a))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 0.3.1 (2025-11-26)
 
 ### Bug Fixes 🐛
