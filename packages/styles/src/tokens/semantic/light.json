@@ -394,6 +394,26 @@
           "type": "color"
         }
       },
+      "muted": {
+        "@": {
+          "value": "{color.grey.700}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.500}",
+          "type": "color"
+        }
+      },
+      "strong": {
+        "@": {
+          "value": "{color.grey.950}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.600}",
+          "type": "color"
+        }
+      },
       "inverse": {
         "@": {
           "value": "{color.white}",
