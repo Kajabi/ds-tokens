@@ -78,6 +78,18 @@
           "value": "{color.grey.100}",
           "type": "color"
         }
+      },
+      "inset": {
+        "@": {
+          "value": "{color.grey.700}",
+          "type": "color"
+        }
+      },
+      "emphasized": {
+        "@": {
+          "value": "{color.grey.600}",
+          "type": "color"
+        }
       }
     },
     "border": {
@@ -395,17 +407,27 @@
           "type": "color"
         }
       },
+      "emphasis": {
+        "@": {
+          "value": "{color.white}",
+          "type": "color"
+        }
+      },
       "inverse": {
         "@": {
           "value": "{color.grey.900}",
           "type": "color"
         },
         "secondary": {
-          "value": "{color.grey.700}",
+          "value": "{color.grey.800}",
           "type": "color"
         },
         "tertiary": {
           "value": "{color.grey.600}",
+          "type": "color"
+        },
+        "emphasis": {
+          "value": "{color.black}",
           "type": "color"
         }
       },

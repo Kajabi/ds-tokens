@@ -15,6 +15,8 @@
   --pine-color-background-subtle: var(--pine-color-grey-100);
   --pine-color-background-muted: var(--pine-color-grey-150);
   --pine-color-background-inverse: var(--pine-color-grey-900);
+  --pine-color-background-inset: var(--pine-color-grey-200);
+  --pine-color-background-emphasized: var(--pine-color-grey-300);
   --pine-color-border: var(--pine-color-grey-300);
   --pine-color-border-hover: var(--pine-color-grey-400);
   --pine-color-border-disabled: var(--pine-color-grey-200);
@@ -82,9 +84,11 @@
   --pine-color-text-muted-disabled: var(--pine-color-grey-500);
   --pine-color-text-strong: var(--pine-color-grey-950);
   --pine-color-text-strong-disabled: var(--pine-color-grey-600);
-  --pine-color-text-inverse: var(--pine-color-white);
-  --pine-color-text-inverse-secondary: var(--pine-color-grey-300);
-  --pine-color-text-inverse-tertiary: var(--pine-color-grey-400);
+  --pine-color-text-emphasis: var(--pine-color-black);
+  --pine-color-text-inverse: var(--pine-color-grey-100);
+  --pine-color-text-inverse-secondary: var(--pine-color-grey-150);
+  --pine-color-text-inverse-tertiary: var(--pine-color-grey-300);
+  --pine-color-text-inverse-emphasis: var(--pine-color-white);
   --pine-color-text-success: var(--pine-color-green-900);
   --pine-color-text-success-disabled: var(--pine-color-green-300);
   --pine-color-text-success-hover: var(--pine-color-green-950);
@@ -193,6 +197,8 @@
   --pine-color-background-subtle: var(--pine-color-grey-900);
   --pine-color-background-muted: var(--pine-color-grey-800);
   --pine-color-background-inverse: var(--pine-color-grey-100);
+  --pine-color-background-inset: var(--pine-color-grey-700);
+  --pine-color-background-emphasized: var(--pine-color-grey-600);
   --pine-color-border: var(--pine-color-grey-600);
   --pine-color-border-hover: var(--pine-color-grey-500);
   --pine-color-border-disabled: var(--pine-color-grey-700);
@@ -260,9 +266,11 @@
   --pine-color-text-muted-disabled: var(--pine-color-grey-400);
   --pine-color-text-strong: var(--pine-color-grey-050);
   --pine-color-text-strong-disabled: var(--pine-color-grey-300);
+  --pine-color-text-emphasis: var(--pine-color-white);
   --pine-color-text-inverse: var(--pine-color-grey-900);
-  --pine-color-text-inverse-secondary: var(--pine-color-grey-700);
+  --pine-color-text-inverse-secondary: var(--pine-color-grey-800);
   --pine-color-text-inverse-tertiary: var(--pine-color-grey-600);
+  --pine-color-text-inverse-emphasis: var(--pine-color-black);
   --pine-color-text-success: var(--pine-color-green-900);
   --pine-color-text-success-disabled: var(--pine-color-green-300);
   --pine-color-text-success-hover: var(--pine-color-green-950);

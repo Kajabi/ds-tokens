@@ -97,6 +97,18 @@
           "value": "{color.grey.900}",
           "type": "color"
         }
+      },
+      "inset": {
+        "@": {
+          "value": "{color.grey.200}",
+          "type": "color"
+        }
+      },
+      "emphasized": {
+        "@": {
+          "value": "{color.grey.300}",
+          "type": "color"
+        }
       }
     },
     "border": {
@@ -414,17 +426,27 @@
           "type": "color"
         }
       },
+      "emphasis": {
+        "@": {
+          "value": "{color.black}",
+          "type": "color"
+        }
+      },
       "inverse": {
         "@": {
-          "value": "{color.white}",
+          "value": "{color.grey.100}",
           "type": "color"
         },
         "secondary": {
-          "value": "{color.grey.300}",
+          "value": "{color.grey.150}",
           "type": "color"
         },
         "tertiary": {
-          "value": "{color.grey.400}",
+          "value": "{color.grey.300}",
+          "type": "color"
+        },
+        "emphasis": {
+          "value": "{color.white}",
           "type": "color"
         }
       },
