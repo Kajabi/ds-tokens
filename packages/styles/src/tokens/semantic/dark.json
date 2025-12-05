@@ -56,37 +56,27 @@
         }
       },
       "app": {
-        "@": {
-          "value": "{color.grey.900}",
-          "type": "color"
-        }
+        "value": "{color.grey.900}",
+        "type": "color"
       },
       "subtle": {
-        "@": {
-          "value": "{color.grey.900}",
-          "type": "color"
-        }
+        "value": "{color.grey.900}",
+        "type": "color"
       },
       "muted": {
-        "@": {
-          "value": "{color.grey.800}",
-          "type": "color"
-        }
+        "value": "{color.grey.800}",
+        "type": "color"
       },
       "inverse": {
-        "@": {
-          "value": "{color.grey.100}",
-          "type": "color"
-        }
+        "value": "{color.grey.100}",
+        "type": "color"
       },
       "inset": {
         "@": {
           "value": "{color.grey.700}",
           "type": "color"
-        }
-      },
-      "emphasized": {
-        "@": {
+        },
+        "emphasized": {
           "value": "{color.grey.600}",
           "type": "color"
         }
