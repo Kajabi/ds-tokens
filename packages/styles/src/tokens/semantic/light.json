@@ -79,6 +79,24 @@
           "value": "{color.grey.100}",
           "type": "color"
         }
+      },
+      "subtle": {
+        "@": {
+          "value": "{color.grey.100}",
+          "type": "color"
+        }
+      },
+      "muted": {
+        "@": {
+          "value": "{color.grey.150}",
+          "type": "color"
+        }
+      },
+      "inverse": {
+        "@": {
+          "value": "{color.grey.900}",
+          "type": "color"
+        }
       }
     },
     "border": {
@@ -107,6 +125,20 @@
           "value": "{color.red.700}",
           "type": "color"
         }
+      },
+      "subtle": {
+        "value": "{color.grey.200}",
+        "type": "color"
+      }
+    },
+    "divider": {
+      "@": {
+        "value": "{color.grey.200}",
+        "type": "color"
+      },
+      "strong": {
+        "value": "{color.grey.300}",
+        "type": "color"
       }
     },
     "danger": {
@@ -342,6 +374,40 @@
           "type": "color"
         }
       },
+      "tertiary": {
+        "@": {
+          "value": "{color.grey.600}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.400}",
+          "type": "color"
+        }
+      },
+      "subtle": {
+        "@": {
+          "value": "{color.grey.500}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.300}",
+          "type": "color"
+        }
+      },
+      "inverse": {
+        "@": {
+          "value": "{color.white}",
+          "type": "color"
+        },
+        "secondary": {
+          "value": "{color.grey.300}",
+          "type": "color"
+        },
+        "tertiary": {
+          "value": "{color.grey.400}",
+          "type": "color"
+        }
+      },
       "success": {
         "@": {
           "value": "{color.green.900}",
@@ -382,6 +448,24 @@
       },
       "hover": {
         "value": "{color.yellow.600}",
+        "type": "color"
+      }
+    },
+    "icon": {
+      "@": {
+        "value": "{color.grey.700}",
+        "type": "color"
+      },
+      "subtle": {
+        "value": "{color.grey.500}",
+        "type": "color"
+      },
+      "disabled": {
+        "value": "{color.grey.400}",
+        "type": "color"
+      },
+      "inverse": {
+        "value": "{color.white}",
         "type": "color"
       }
     },
