@@ -60,20 +60,6 @@
       }
     },
     "background": {
-      "container": {
-        "@": {
-          "value": "{color.white}",
-          "type": "color"
-        },
-        "disabled": {
-          "value": "{color.grey.150}",
-          "type": "color"
-        },
-        "hover": {
-          "value": "{color.grey.050}",
-          "type": "color"
-        }
-      },
       "app": {
         "value": "{color.grey.100}",
         "type": "color"
@@ -89,6 +75,20 @@
       "inverse": {
         "value": "{color.grey.900}",
         "type": "color"
+      },
+      "container": {
+        "@": {
+          "value": "{color.white}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.150}",
+          "type": "color"
+        },
+        "hover": {
+          "value": "{color.grey.050}",
+          "type": "color"
+        }
       },
       "inset": {
         "@": {
