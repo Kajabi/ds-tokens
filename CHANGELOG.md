@@ -1,3 +1,18 @@
+## 1.0.1-prepatch.0 (2025-12-08)
+
+### Bug Fixes 🐛
+
+- add semantic tokens ([86bb63b](https://github.com/Kajabi/ds-tokens/commit/86bb63b))
+- add text semantic general tokens ([243aa6a](https://github.com/Kajabi/ds-tokens/commit/243aa6a))
+- add text inverse tokens ([875d3f9](https://github.com/Kajabi/ds-tokens/commit/875d3f9))
+- add additional tokens ([b9d2e0d](https://github.com/Kajabi/ds-tokens/commit/b9d2e0d))
+- more semantic tokens ([682f412](https://github.com/Kajabi/ds-tokens/commit/682f412))
+- update inverse color ([244b0a7](https://github.com/Kajabi/ds-tokens/commit/244b0a7))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 # 1.0.0 (2025-12-01)
 
 This was a version bump only, there were no code changes.
