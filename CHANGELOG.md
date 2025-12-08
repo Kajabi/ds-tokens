@@ -1,3 +1,14 @@
+## 1.0.1 (2025-12-08)
+
+### Bug Fixes 🐛
+
+- remove divider and test versions ([de1e01f](https://github.com/Kajabi/ds-tokens/commit/de1e01f))
+- add missing version ([ee68d64](https://github.com/Kajabi/ds-tokens/commit/ee68d64))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 # 1.0.0 (2025-12-01)
 
 This was a version bump only, there were no code changes.
