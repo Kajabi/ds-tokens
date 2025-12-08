@@ -73,8 +73,26 @@
         "type": "color"
       },
       "inverse": {
-        "value": "{color.grey.900}",
-        "type": "color"
+        "app": {
+          "value": "{color.grey.900}",
+          "type": "color"
+        },
+        "subtle": {
+          "value": "{color.grey.800}",
+          "type": "color"
+        },
+        "muted": {
+          "value": "{color.grey.700}",
+          "type": "color"
+        },
+        "container": {
+          "value": "{color.black}",
+          "type": "color"
+        },
+        "inset": {
+          "value": "{color.grey.950}",
+          "type": "color"
+        }
       },
       "container": {
         "@": {

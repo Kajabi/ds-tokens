@@ -191,7 +191,11 @@
   --pine-color-background-app: var(--pine-color-grey-100);
   --pine-color-background-subtle: var(--pine-color-grey-100);
   --pine-color-background-muted: var(--pine-color-grey-150);
-  --pine-color-background-inverse: var(--pine-color-grey-900);
+  --pine-color-background-inverse-app: var(--pine-color-grey-900);
+  --pine-color-background-inverse-subtle: var(--pine-color-grey-800);
+  --pine-color-background-inverse-muted: var(--pine-color-grey-700);
+  --pine-color-background-inverse-container: var(--pine-color-black);
+  --pine-color-background-inverse-inset: var(--pine-color-grey-950);
   --pine-color-background-container: var(--pine-color-white);
   --pine-color-background-container-disabled: var(--pine-color-grey-150);
   --pine-color-background-container-hover: var(--pine-color-grey-050);
@@ -454,7 +458,11 @@
   --pine-color-background-app: var(--pine-color-grey-900);
   --pine-color-background-subtle: var(--pine-color-grey-900);
   --pine-color-background-muted: var(--pine-color-grey-800);
-  --pine-color-background-inverse: var(--pine-color-grey-100);
+  --pine-color-background-inverse-app: var(--pine-color-grey-100);
+  --pine-color-background-inverse-subtle: var(--pine-color-grey-150);
+  --pine-color-background-inverse-muted: var(--pine-color-grey-200);
+  --pine-color-background-inverse-container: var(--pine-color-white);
+  --pine-color-background-inverse-inset: var(--pine-color-grey-050);
   --pine-color-background-container: var(--pine-color-black);
   --pine-color-background-container-disabled: var(--pine-color-grey-800);
   --pine-color-background-container-hover: var(--pine-color-grey-950);
