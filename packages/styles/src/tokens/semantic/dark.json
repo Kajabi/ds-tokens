@@ -132,16 +132,6 @@
         "type": "color"
       }
     },
-    "divider": {
-      "@": {
-        "value": "{color.grey.700}",
-        "type": "color"
-      },
-      "strong": {
-        "value": "{color.grey.600}",
-        "type": "color"
-      }
-    },
     "danger": {
       "@": {
         "value": "{color.red.600}",
