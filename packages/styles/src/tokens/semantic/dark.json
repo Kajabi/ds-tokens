@@ -309,7 +309,7 @@
           "type": "color"
         },
         "danger": {
-          "value": "{color.red.600}",
+          "value": "{color.red.500}",
           "type": "color"
         },
         "disabled": {
