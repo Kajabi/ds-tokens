@@ -1,3 +1,16 @@
+## 1.0.2 (2025-12-10)
+
+### Bug Fixes 🐛
+
+- update primary hover dark mode color ([788151e](https://github.com/Kajabi/ds-tokens/commit/788151e))
+- update error message text from red 600 rto red 500 ([1fedf2a](https://github.com/Kajabi/ds-tokens/commit/1fedf2a))
+- build generated tokens ([8ffe1b7](https://github.com/Kajabi/ds-tokens/commit/8ffe1b7))
+
+### ❤️ Thank You
+
+- Kajabi Bot @dev-kjbot
+- Quinton Jason
+
 ## 1.0.1 (2025-12-08)
 
 ### Bug Fixes 🐛
