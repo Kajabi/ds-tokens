@@ -1,3 +1,13 @@
+## 1.0.3-dev.0 (2025-12-11)
+
+### Bug Fixes 🐛
+
+- restore JSON token exports to dist/tokens ([c547a3d](https://github.com/Kajabi/ds-tokens/commit/c547a3d))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.2 (2025-12-10)
 
 ### Bug Fixes 🐛
