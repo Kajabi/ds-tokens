@@ -2,10 +2,7 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-import * as globModule from 'glob';
 import { fileURLToPath } from 'url';
-
-const { glob } = globModule;
 
 // Get directory info for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 // Define paths
-const sourceDir = path.join(rootDir, 'src', 'tokens', 'base');
+const tokensDir = path.join(rootDir, 'src', 'tokens');
 const destDir = path.join(rootDir, 'dist', 'tokens');
 
 console.log('Copying token files to dist/tokens...');
@@ -21,24 +18,41 @@ console.log('Copying token files to dist/tokens...');
 // Ensure the destination directory exists
 fs.ensureDirSync(destDir);
 
-// Find all JSON files in source directory
-const jsonFiles = glob.sync('**/*.json', { cwd: sourceDir });
+let copiedCount = 0;
 
-if (jsonFiles.length === 0) {
-  console.warn('No JSON token files found in src/tokens/base/');
+// Copy core tokens from brand/core.json
+const coreSource = path.join(tokensDir, 'brand', 'core.json');
+if (fs.existsSync(coreSource)) {
+  fs.copyFileSync(coreSource, path.join(destDir, 'core.json'));
+  console.log('Copied: brand/core.json → core.json');
+  copiedCount++;
+} else {
+  console.warn('Warning: brand/core.json not found');
 }
 
-// Copy each JSON file
-jsonFiles.forEach(file => {
-  const sourcePath = path.join(sourceDir, file);
-  const destPath = path.join(destDir, file);
-  
-  // Ensure the destination directory structure exists
-  fs.ensureDirSync(path.dirname(destPath));
-  
-  // Copy the file
-  fs.copyFileSync(sourcePath, destPath);
-  console.log(`Copied: ${file}`);
-});
+// Copy semantic tokens from semantic/light.json as semantic.json (for backwards compatibility)
+const semanticLightSource = path.join(tokensDir, 'semantic', 'light.json');
+if (fs.existsSync(semanticLightSource)) {
+  fs.copyFileSync(semanticLightSource, path.join(destDir, 'semantic.json'));
+  console.log('Copied: semantic/light.json → semantic.json');
+  copiedCount++;
+} else {
+  console.warn('Warning: semantic/light.json not found');
+}
 
-console.log('✅ Token files copied successfully to dist/tokens/');
+// Copy dark theme tokens for future dark mode support
+const semanticDarkSource = path.join(tokensDir, 'semantic', 'dark.json');
+if (fs.existsSync(semanticDarkSource)) {
+  fs.copyFileSync(semanticDarkSource, path.join(destDir, 'semantic-dark.json'));
+  console.log('Copied: semantic/dark.json → semantic-dark.json');
+  copiedCount++;
+} else {
+  console.warn('Warning: semantic/dark.json not found');
+}
+
+if (copiedCount === 0) {
+  console.error('❌ No token files were copied!');
+  process.exit(1);
+}
+
+console.log(`✅ ${copiedCount} token file(s) copied successfully to dist/tokens/`);
