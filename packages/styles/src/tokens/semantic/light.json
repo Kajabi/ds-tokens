@@ -433,7 +433,8 @@
       "inverse": {
         "@": {
           "value": "{color.grey.100}",
-          "type": "color"
+          "type": "color",
+          "description": "the primary text inverse color"
         },
         "secondary": {
           "value": "{color.grey.150}",

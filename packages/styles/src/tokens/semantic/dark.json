@@ -493,7 +493,8 @@
     "brand": {
       "@": {
         "value": "{color.black}",
-        "type": "color"
+        "type": "color",
+        "description": "The primary brand color"
       }
     }
   }
