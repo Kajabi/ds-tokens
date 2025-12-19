@@ -1,3 +1,13 @@
+## 1.0.4-dev.0 (2025-12-19)
+
+### Bug Fixes 🐛
+
+- add link specific alert tokens ([66c0456](https://github.com/Kajabi/ds-tokens/commit/66c0456))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.3-dev.0 (2025-12-11)
 
 ### Bug Fixes 🐛
