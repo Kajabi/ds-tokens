@@ -62,93 +62,113 @@
     "background": {
       "app": {
         "value": "{color.grey.100}",
-        "type": "color"
+        "type": "color",
+        "description": "Primary app background color"
       },
       "subtle": {
         "value": "{color.grey.100}",
-        "type": "color"
+        "type": "color",
+        "description": "Subtle background for light surfaces"
       },
       "muted": {
         "value": "{color.grey.150}",
-        "type": "color"
+        "type": "color",
+        "description": "Muted background for slightly recessed areas"
       },
       "inverse": {
         "app": {
           "value": "{color.grey.900}",
-          "type": "color"
+          "type": "color",
+          "description": "Primary dark/inverse app background"
         },
         "subtle": {
           "value": "{color.grey.800}",
-          "type": "color"
+          "type": "color",
+          "description": "Subtle background on dark surfaces"
         },
         "muted": {
           "value": "{color.grey.700}",
-          "type": "color"
+          "type": "color",
+          "description": "Muted background on dark surfaces"
         },
         "container": {
           "value": "{color.black}",
-          "type": "color"
+          "type": "color",
+          "description": "Container background on dark surfaces"
         },
         "inset": {
           "value": "{color.grey.950}",
-          "type": "color"
+          "type": "color",
+          "description": "Inset background for dark surfaces like tooltips"
         }
       },
       "container": {
         "@": {
           "value": "{color.white}",
-          "type": "color"
+          "type": "color",
+          "description": "Default container background (cards, panels)"
         },
         "disabled": {
           "value": "{color.grey.150}",
-          "type": "color"
+          "type": "color",
+          "description": "Container background in disabled state"
         },
         "hover": {
           "value": "{color.grey.050}",
-          "type": "color"
+          "type": "color",
+          "description": "Container background on hover"
         }
       },
       "inset": {
         "@": {
           "value": "{color.grey.200}",
-          "type": "color"
+          "type": "color",
+          "description": "Background for recessed or inset areas"
         },
         "emphasized": {
           "value": "{color.grey.300}",
-          "type": "color"
+          "type": "color",
+          "description": "Emphasized inset background"
         }
       }
     },
     "border": {
       "@": {
         "value": "{color.grey.300}",
-        "type": "color"
+        "type": "color",
+        "description": "Default border color on light backgrounds"
       },
       "hover": {
         "value": "{color.grey.400}",
-        "type": "color"
+        "type": "color",
+        "description": "Border color on hover state"
       },
       "disabled": {
         "value": "{color.grey.200}",
-        "type": "color"
+        "type": "color",
+        "description": "Border color for disabled elements"
       },
       "active": {
         "value": "{color.grey.400}",
-        "type": "color"
+        "type": "color",
+        "description": "Border color for active or selected state"
       },
       "danger": {
         "@": {
           "value": "{color.red.600}",
-          "type": "color"
+          "type": "color",
+          "description": "Border color for danger/error states"
         },
         "hover": {
           "value": "{color.red.700}",
-          "type": "color"
+          "type": "color",
+          "description": "Danger border color on hover"
         }
       },
       "subtle": {
         "value": "{color.grey.200}",
-        "type": "color"
+        "type": "color",
+        "description": "Subtle border for less prominent divisions"
       }
     },
     "danger": {
@@ -248,23 +268,28 @@
     "text": {
       "@": {
         "value": "{color.grey.900}",
-        "type": "color"
+        "type": "color",
+        "description": "Default text color for primary content"
       },
       "hover": {
         "value": "{color.grey.950}",
-        "type": "color"
+        "type": "color",
+        "description": "Text color on hover state"
       },
       "disabled": {
         "value": "{color.grey.500}",
-        "type": "color"
+        "type": "color",
+        "description": "Text color for disabled or inactive elements"
       },
       "readonly": {
         "value": "{color.grey.700}",
-        "type": "color"
+        "type": "color",
+        "description": "Text color for read-only content"
       },
       "active": {
         "value": "{color.grey.950}",
-        "type": "color"
+        "type": "color",
+        "description": "Text color for active or selected state"
       },
       "accent": {
         "@": {
@@ -373,80 +398,95 @@
       "secondary": {
         "@": {
           "value": "{color.grey.800}",
-          "type": "color"
+          "type": "color",
+          "description": "Secondary text for less prominent content"
         },
         "disabled": {
           "value": "{color.grey.400}",
-          "type": "color"
+          "type": "color",
+          "description": "Secondary text in disabled state"
         },
         "hover": {
           "value": "{color.grey.900}",
-          "type": "color"
+          "type": "color",
+          "description": "Secondary text on hover"
         }
       },
       "tertiary": {
         "@": {
           "value": "{color.grey.600}",
-          "type": "color"
+          "type": "color",
+          "description": "Tertiary text for subtle content like captions"
         },
         "disabled": {
           "value": "{color.grey.400}",
-          "type": "color"
+          "type": "color",
+          "description": "Tertiary text in disabled state"
         }
       },
       "subtle": {
         "@": {
           "value": "{color.grey.500}",
-          "type": "color"
+          "type": "color",
+          "description": "Subtle text for the least prominent content"
         },
         "disabled": {
           "value": "{color.grey.300}",
-          "type": "color"
+          "type": "color",
+          "description": "Subtle text in disabled state"
         }
       },
       "muted": {
         "@": {
           "value": "{color.grey.700}",
-          "type": "color"
+          "type": "color",
+          "description": "Muted text for de-emphasized content"
         },
         "disabled": {
           "value": "{color.grey.500}",
-          "type": "color"
+          "type": "color",
+          "description": "Muted text in disabled state"
         }
       },
       "strong": {
         "@": {
           "value": "{color.grey.950}",
-          "type": "color"
+          "type": "color",
+          "description": "Strong text for maximum emphasis on light backgrounds"
         },
         "disabled": {
           "value": "{color.grey.600}",
-          "type": "color"
+          "type": "color",
+          "description": "Strong text in disabled state"
         }
       },
       "emphasis": {
         "@": {
           "value": "{color.black}",
-          "type": "color"
+          "type": "color",
+          "description": "Maximum emphasis text using pure black"
         }
       },
       "inverse": {
         "@": {
           "value": "{color.grey.100}",
           "type": "color",
-          "description": "the primary text inverse color"
+          "description": "Primary text color on dark backgrounds"
         },
         "secondary": {
           "value": "{color.grey.150}",
-          "type": "color"
+          "type": "color",
+          "description": "Secondary text color on dark backgrounds"
         },
         "tertiary": {
           "value": "{color.grey.300}",
-          "type": "color"
+          "type": "color",
+          "description": "Tertiary text color on dark backgrounds"
         },
         "emphasis": {
           "value": "{color.white}",
-          "type": "color"
+          "type": "color",
+          "description": "Maximum emphasis text on dark backgrounds"
         }
       },
       "success": {
@@ -495,19 +535,23 @@
     "icon": {
       "@": {
         "value": "{color.grey.700}",
-        "type": "color"
+        "type": "color",
+        "description": "Default icon color"
       },
       "subtle": {
         "value": "{color.grey.500}",
-        "type": "color"
+        "type": "color",
+        "description": "Subtle icon color for less prominent icons"
       },
       "disabled": {
         "value": "{color.grey.400}",
-        "type": "color"
+        "type": "color",
+        "description": "Icon color for disabled state"
       },
       "inverse": {
         "value": "{color.white}",
-        "type": "color"
+        "type": "color",
+        "description": "Icon color on dark backgrounds"
       }
     },
     "brand": {
