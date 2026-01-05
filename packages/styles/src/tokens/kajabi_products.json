@@ -2,7 +2,7 @@
   "color": {
     "brand": {
       "@": {
-        "value": "{color.mercury.500}",
+        "value": "{color.grey.950}",
         "type": "color"
       }
     }
