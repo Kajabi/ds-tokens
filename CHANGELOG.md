@@ -1,3 +1,16 @@
+## 1.0.4-dev.1 (2026-01-05)
+
+### Bug Fixes 🐛
+
+- remove dev version ([701cd43](https://github.com/Kajabi/ds-tokens/commit/701cd43))
+- fix version ([eac3f86](https://github.com/Kajabi/ds-tokens/commit/eac3f86))
+- update brand color token from mercury to grey ([#21](https://github.com/Kajabi/ds-tokens/pull/21))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 1.0.3-dev.0 (2025-12-11)
 
 ### Bug Fixes 🐛
