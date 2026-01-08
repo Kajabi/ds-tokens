@@ -1,3 +1,17 @@
+## 1.0.5 (2026-01-08)
+
+### Bug Fixes 🐛
+
+- add token mapping script ([4dc368b](https://github.com/Kajabi/ds-tokens/commit/4dc368b))
+
+### Documentation 📄
+
+- update lint mappings to readme ([37dbbea](https://github.com/Kajabi/ds-tokens/commit/37dbbea))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.4 (2026-01-05)
 
 ### Bug Fixes 🐛
