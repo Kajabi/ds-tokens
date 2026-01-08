@@ -82,6 +82,22 @@ For more granular imports of specific components:
 - Motion and animations
 - Component-specific tokens (button, chip, etc.)
 
+## Lint Mappings (for Tooling)
+
+This package also exports token mappings for linting tools that enforce semantic token usage:
+
+```javascript
+// ESLint/Stylelint plugins can import this
+const tokenMappings = require('@kajabi-ui/styles/lint-mappings');
+```
+
+The `lint-mappings` export provides:
+- **hexToCore**: Hex color → core token mappings (e.g., `#343332` → `grey-900`)
+- **mappings**: Context-aware core → semantic token mappings (text, background, border)
+- **ambiguous**: Tokens with multiple semantic meanings based on context
+
+This is used by Pine color linting rules in [pine](https://github.com/Kajabi/pine) and [kajabi-products](https://github.com/Kajabi/kajabi-products) to ensure developers use semantic tokens for proper dark mode support.
+
 ## Project Structure
 
 ```
