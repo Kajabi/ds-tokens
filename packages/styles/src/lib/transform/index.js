@@ -464,7 +464,10 @@ async function run() {
     if (light) {
       light.forEach(set => {
         if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/')) {
-          lightSourceFiles.push(`${basePath}/${set}.json`);
+          // Only add light tokens to lightSourceFiles
+          if (set.includes('/light') || !set.includes('/')) {
+            lightSourceFiles.push(`${basePath}/${set}.json`);
+          }
         }
         if (set.includes('components/') && set.includes('/light')) {
           lightSourceFiles.push(`${basePath}/${set}.json`);
@@ -479,16 +482,17 @@ async function run() {
     darkSourceFiles.push(`${basePath}/semantic/light.json`);
     darkSourceFiles.push(`${basePath}/semantic/dark.json`);
 
-    if (light) {
-      light.forEach(set => {
-        if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/')) {
-          darkSourceFiles.push(`${basePath}/${set}.json`);
-        }
-      });
-    }
+    // Note: We don't add brand-specific light tokens to dark source files anymore
+    // since brand tokens are self-contained and dark tokens will be added below
 
     if (dark) {
       dark.forEach(set => {
+        // Add brand-specific dark tokens (e.g., kajabi_products/dark)
+        // Only add dark tokens, not light tokens
+        if (set.includes(brandName) && !set.includes('core/') && !set.includes('semantic/') && set.includes('/dark')) {
+          darkSourceFiles.push(`${basePath}/${set}.json`);
+        }
+        // Add component dark tokens
         if (set.includes('components/') && set.includes('/dark')) {
           darkSourceFiles.push(`${basePath}/${set}.json`);
         }
@@ -533,7 +537,9 @@ async function run() {
         if (filePath.includes('brand/core')) return true;
         // Include semantic tokens
         if (filePath.includes('semantic/light')) return true;
-        // Include brand-specific tokens
+        // Include brand-specific tokens (new folder structure: kajabi_products/light.json)
+        if (filePath.includes(`${brandName}/light`)) return true;
+        // Include brand-specific tokens (old file structure: kajabi_products.json for backwards compat)
         if (filePath.includes(`${brandName}.json`)) return true;
         // Include component tokens
         if (filePath.includes('components/') && filePath.includes('/light')) return true;
@@ -548,10 +554,12 @@ async function run() {
       (token) => {
         const filePath = token.filePath || '';
 
-        // For both pine and kajabi_products brands, include semantic and component dark tokens
+        // For both pine and kajabi_products brands, include semantic, brand, and component dark tokens
         // Note: core tokens no longer have dark mode variants
         // Include semantic dark tokens
         if (filePath.includes('semantic/dark')) return true;
+        // Include brand-specific dark tokens (e.g., kajabi_products/dark.json)
+        if (filePath.includes(`${brandName}/dark`)) return true;
         // Include component dark tokens
         if (filePath.includes('components/') && filePath.includes('/dark')) return true;
         return false;
