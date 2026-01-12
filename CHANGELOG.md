@@ -1,3 +1,14 @@
+## 1.0.6 (2026-01-12)
+
+### Bug Fixes 🐛
+
+- add kajabi products brand ([742fc8f](https://github.com/Kajabi/ds-tokens/commit/742fc8f))
+- add dark kp to theme ([2cac9d8](https://github.com/Kajabi/ds-tokens/commit/2cac9d8))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.5 (2026-01-08)
 
 ### Bug Fixes 🐛
