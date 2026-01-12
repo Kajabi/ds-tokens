@@ -20,7 +20,8 @@
       "color.brand.@": "S:efc222dfa4d6efbe16e06a83ceb1d75b3c98db22,"
     },
     "selectedTokenSets": {
-      "kajabi_products": "enabled",
+      "kajabi_products/light": "source",
+      "kajabi_products/dark": "source",
       "semantic/light": "source",
       "semantic/dark": "source",
       "brand/core": "source"
@@ -36,7 +37,7 @@
     "id": "kajabi_products-light",
     "name": "light",
     "selectedTokenSets": {
-      "kajabi_products": "enabled",
+      "kajabi_products/light": "enabled",
       "semantic/light": "enabled",
       "brand/core": "enabled"
     },
@@ -294,7 +295,7 @@
     "id": "kajabi_products-dark",
     "name": "dark",
     "selectedTokenSets": {
-      "kajabi_products": "enabled",
+      "kajabi_products/dark": "enabled",
       "semantic/dark": "enabled",
       "brand/core": "enabled"
     },

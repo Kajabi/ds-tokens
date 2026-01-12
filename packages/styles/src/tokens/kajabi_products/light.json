@@ -1,0 +1,10 @@
+{
+  "color": {
+    "brand": {
+      "@": {
+        "value": "{color.grey.950}",
+        "type": "color"
+      }
+    }
+  }
+}
