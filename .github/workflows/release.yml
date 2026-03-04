@@ -112,10 +112,3 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      - name: Report DS Tokens production deployment to GetDX
-        if: ${{ success() }}
-        uses: Kajabi/getdx-deployment-identifier-action@main
-        with:
-          getdx-instance-name: 'kajabi'
-          getdx-token: ${{ secrets.GETDX_DEPLOYMENT_TOKEN }}
-          service-name: 'ds-tokens'
