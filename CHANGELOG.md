@@ -1,3 +1,14 @@
+## 1.0.7 (2026-03-04)
+
+### Bug Fixes 🐛
+
+- add site-brand semantic token overrides for member-facing pages ([04553a1](https://github.com/Kajabi/ds-tokens/commit/04553a1))
+- add before the build ([d24f460](https://github.com/Kajabi/ds-tokens/commit/d24f460))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.6 (2026-01-12)
 
 ### Bug Fixes 🐛
