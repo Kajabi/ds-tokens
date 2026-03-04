@@ -641,7 +641,24 @@ async function run() {
     const semanticDarkContent = await fs.readFile(semanticDarkPath, 'utf-8');
     // Remove header from dark content and combine
     const semanticDarkWithoutHeader = semanticDarkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
-    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n');
+
+    // Site-brand theme override — member-facing pages opt in via data-theme="site".
+    // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+    // falling back to Kajabi purple when the brand variable is not set.
+    // Admin pages never have this attribute → Kajabi purple unchanged.
+    const siteBrandOverride = `
+// Site-brand theme override — member-facing pages opt in via data-theme="site".
+// Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+// falling back to Kajabi purple when the brand variable is not set.
+// Admin pages never have this attribute → Kajabi purple unchanged.
+[data-theme="site"] {
+  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
+  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
+  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
+  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
+}`;
+
+    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n' + siteBrandOverride + '\n');
     await fs.unlink(semanticDarkPath);
   } catch (e) {
     console.warn('Could not combine semantic files:', e.message);
