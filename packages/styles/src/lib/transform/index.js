@@ -714,7 +714,7 @@ async function run() {
         await fs.writeFile(lightPath, lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n');
         await fs.unlink(darkPath);
       } catch (e) {
-        // No dark file for this component — that's fine
+        if (e.code !== 'ENOENT') throw e;
       }
     }
   }
