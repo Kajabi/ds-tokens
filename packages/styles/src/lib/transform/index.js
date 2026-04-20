@@ -1,5 +1,6 @@
 import { register, permutateThemes } from '@tokens-studio/sd-transforms';
-import { generateCoreFiles, generateComponentFiles, generateSemanticFiles } from './generators/index.js';
+import { generateCoreFiles, generateComponentFiles, generateComponentDarkFiles, generateSemanticFiles } from './generators/index.js';
+import { readdirSync } from 'fs';
 import StyleDictionary from 'style-dictionary';
 import { getReferences, usesReferences, outputReferencesTransformed } from "style-dictionary/utils";
 import { promises as fs } from 'fs';
@@ -404,18 +405,20 @@ async function run() {
     },
   };
 
-  // Component-specific configuration
-  // Components have light/dark variants, so we need to handle them per theme
-  // Note: core tokens no longer have dark mode variants
+  // Component-specific configuration — light mode only (dark files excluded to prevent collisions)
+  const lightComponentFiles = readdirSync(`${basePath}/components`)
+    .filter(f => f.endsWith('.json') && !f.includes('-dark'))
+    .map(f => `${basePath}/components/${f}`);
+
   const componentConfig = {
     log: {
       verbosity: 'verbose',
     },
     source: [
-      `${basePath}/brand/core.json`, // Core tokens for reference resolution
+      `${basePath}/brand/core.json`,
       `${basePath}/semantic/light.json`,
       `${basePath}/semantic/dark.json`,
-      `${basePath}/components/**/*.json`
+      ...lightComponentFiles,
     ],
     preprocessors: ['tokens-studio'],
     platforms: {
@@ -428,6 +431,32 @@ async function run() {
       },
     },
   };
+
+  // Dark component configuration — processed separately to prevent token collisions
+  const darkComponentFiles = readdirSync(`${basePath}/components`)
+    .filter(f => f.includes('-dark.json'))
+    .map(f => `${basePath}/components/${f}`);
+
+  const componentDarkConfig = darkComponentFiles.length > 0 ? {
+    log: {
+      verbosity: 'verbose',
+    },
+    source: [
+      `${basePath}/brand/core.json`,
+      `${basePath}/semantic/light.json`,
+      ...darkComponentFiles,
+    ],
+    preprocessors: ['tokens-studio'],
+    platforms: {
+      css: {
+        transformGroup: 'tokens-studio',
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+        buildPath: buildPath,
+        files: [...generateComponentDarkFiles()],
+        prefix: 'pine'
+      },
+    },
+  } : null;
 
   // Theme-specific configuration
   // Group themes by brand and combine light/dark into single files
@@ -578,12 +607,13 @@ async function run() {
 
   // Build component files
   const componentSd = new StyleDictionary(componentConfig);
+  const componentDarkSd = componentDarkConfig ? new StyleDictionary(componentDarkConfig) : null;
 
   // Build theme files
   const themeSds = themeConfigs.map(config => new StyleDictionary(config));
 
   // Register transform for all configurations
-  const allSds = [coreSdLight, semanticSdLight, semanticSdDark, componentSd, ...themeSds];
+  const allSds = [coreSdLight, semanticSdLight, semanticSdDark, componentSd, ...(componentDarkSd ? [componentDarkSd] : []), ...themeSds];
   for (const sd of allSds) {
     sd.registerTransform({
       name: "attribute/themeable",
@@ -665,6 +695,29 @@ async function run() {
   }
 
   await componentSd.buildAllPlatforms();
+
+  if (componentDarkSd) {
+    await componentDarkSd.buildAllPlatforms();
+
+    // Combine light and dark component files
+    const componentBuildDir = resolve(buildPath, 'pine/components');
+    const componentFolders = await fs.readdir(componentBuildDir);
+    for (const folder of componentFolders) {
+      const lightPath = resolve(componentBuildDir, folder, `${folder}.tokens.scss`);
+      const darkPath = resolve(componentBuildDir, folder, `${folder}.tokens-dark.scss`);
+      try {
+        const [lightContent, darkContent] = await Promise.all([
+          fs.readFile(lightPath, 'utf-8'),
+          fs.readFile(darkPath, 'utf-8'),
+        ]);
+        const darkWithoutHeader = darkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
+        await fs.writeFile(lightPath, lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n');
+        await fs.unlink(darkPath);
+      } catch (e) {
+        // No dark file for this component — that's fine
+      }
+    }
+  }
 
   // Build theme files (light and dark separately)
   for (const themeSd of themeSds) {
