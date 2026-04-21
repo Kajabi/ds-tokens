@@ -7,7 +7,7 @@
         "dismiss": { "value": "{color.grey.200}", "type": "color" },
         "dismiss-hover": { "value": "{color.grey.700}", "type": "color" },
         "icon": { "value": "{color.grey.300}", "type": "color" },
-        "link": { "value": "{color.grey.200}", "type": "color" },
+        "link": { "value": "{color.grey.300}", "type": "color" },
         "link-hover": { "value": "{color.grey.050}", "type": "color" },
         "text": { "value": "{color.grey.100}", "type": "color" }
       },
