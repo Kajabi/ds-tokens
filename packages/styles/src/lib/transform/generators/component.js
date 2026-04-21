@@ -11,10 +11,11 @@ const format = "css/variables-host";
 export const generateComponentFiles = () => {
   const filesArr = [];
 
-  // Generates a list of components from the tokens/components folder
-  const components = fs.readdirSync(`${basePath}/components`).map((comp) => comp.replace(/.json$/g, ""));
+  const allFiles = fs.readdirSync(`${basePath}/components`);
+  const lightFiles = allFiles.filter(f => f.endsWith('.json') && !f.includes('-dark'));
 
-  for (const comp of components) {
+  for (const file of lightFiles) {
+    const comp = file.replace('.json', '');
     const componentName = `${componentPrefix}-${comp}`;
 
     // Component-specific tokens at host level (light mode)
@@ -22,7 +23,6 @@ export const generateComponentFiles = () => {
       format,
       filter: (token) => {
         const filePath = token.filePath || '';
-        // Match component files like components/alert.json
         return filePath.includes(`components/${comp}.json`);
       },
       options: {
@@ -31,6 +31,33 @@ export const generateComponentFiles = () => {
         outputReferences: true,
       },
       destination: `pine/components/${componentName}/${componentName}.tokens.scss`,
+    });
+  }
+  return filesArr;
+};
+
+export const generateComponentDarkFiles = () => {
+  const filesArr = [];
+
+  const allFiles = fs.readdirSync(`${basePath}/components`);
+  const darkFiles = allFiles.filter(f => f.includes('-dark.json'));
+
+  for (const darkFile of darkFiles) {
+    const comp = darkFile.replace('-dark.json', '');
+    const componentName = `${componentPrefix}-${comp}`;
+
+    filesArr.push({
+      format,
+      filter: (token) => {
+        const filePath = token.filePath || '';
+        return filePath.includes(`components/${comp}-dark.json`);
+      },
+      options: {
+        selector: ":host-context([data-theme='dark'])",
+        prefix: 'pine',
+        outputReferences: true,
+      },
+      destination: `pine/components/${componentName}/${componentName}.tokens-dark.scss`,
     });
   }
   return filesArr;
