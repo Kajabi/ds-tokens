@@ -1,3 +1,16 @@
+## 1.0.8 (2026-04-21)
+
+### Bug Fixes 🐛
+
+- update to alert color link ([0ea0551](https://github.com/Kajabi/ds-tokens/commit/0ea0551))
+- **alert:** add dark mode support for alert component ([5ef8368](https://github.com/Kajabi/ds-tokens/commit/5ef8368))
+- **alert:** resolve catch ([a2932ee](https://github.com/Kajabi/ds-tokens/commit/a2932ee))
+- **border-radius:** add semantic border radius tokens ([72dc2f6](https://github.com/Kajabi/ds-tokens/commit/72dc2f6))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.7 (2026-03-04)
 
 ### Bug Fixes 🐛
