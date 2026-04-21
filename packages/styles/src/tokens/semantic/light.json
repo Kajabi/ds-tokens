@@ -26,6 +26,21 @@
     }
   },
   "border-radius": {
+    "sm": {
+      "value": "{dimension.050}",
+      "type": "borderRadius",
+      "description": "Small inputs, tight UI elements"
+    },
+    "md": {
+      "value": "{dimension.125}",
+      "type": "borderRadius",
+      "description": "Standard cards, modals"
+    },
+    "lg": {
+      "value": "{dimension.200}",
+      "type": "borderRadius",
+      "description": "Large cards, panels"
+    },
     "full": {
       "value": "9999px",
       "type": "borderRadius",

@@ -424,6 +424,9 @@
   --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
   --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-300);
+  --pine-border-radius-sm: var(--pine-dimension-050);
+  --pine-border-radius-md: var(--pine-dimension-125);
+  --pine-border-radius-lg: var(--pine-dimension-200);
   --pine-border-radius-full: 9999px;
   --pine-typography-heading-1: var(--pine-font-weight-semi-bold) var(--pine-font-size-heading-1)/var(--pine-line-height-heading) var(--pine-font-family-greet);
   --pine-typography-heading-2: var(--pine-font-weight-semi-bold) var(--pine-font-size-heading-2)/var(--pine-line-height-heading) var(--pine-font-family-greet);
