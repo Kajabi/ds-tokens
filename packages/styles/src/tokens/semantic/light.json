@@ -689,7 +689,7 @@
     "heading": {
       "1": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.1}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -699,7 +699,7 @@
       },
       "2": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.2}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -709,7 +709,7 @@
       },
       "3": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.157}",
@@ -719,7 +719,7 @@
       },
       "4": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.4}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -729,7 +729,7 @@
       },
       "5": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.heading.5}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -739,7 +739,7 @@
       },
       "6": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.heading.6}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -749,7 +749,7 @@
       },
       "caption": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.caption}",
           "lineHeight": "{line-height.heading} * 100%",
@@ -924,7 +924,7 @@
   },
   "font-family": {
     "heading": {
-      "value": "{font-family.greet}",
+      "value": "{font-family.inter}",
       "type": "fontFamilies"
     },
     "body": {
