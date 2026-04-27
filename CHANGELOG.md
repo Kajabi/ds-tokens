@@ -1,3 +1,13 @@
+## 1.1.0 (2026-04-27)
+
+### Features 🚀
+
+- **tokens:** update semantic heading tokens to use Inter ([889693a](https://github.com/Kajabi/ds-tokens/commit/889693a))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.0.8 (2026-04-21)
 
 ### Bug Fixes 🐛
