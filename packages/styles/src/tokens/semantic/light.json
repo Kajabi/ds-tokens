@@ -810,7 +810,7 @@
       },
       "brand-label": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.md}",
           "lineHeight": "{line-height.body} * 100%"
@@ -868,7 +868,7 @@
       },
       "brand-label": {
         "value": {
-          "fontFamily": "{font-family.greet}",
+          "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.sm}",
           "lineHeight": "{line-height.body} * 100%"
