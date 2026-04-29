@@ -1,3 +1,13 @@
+## 1.1.1 (2026-04-29)
+
+### Bug Fixes 🐛
+
+- **tokens:** update brand dark mode token to grey-050 ([21bac0b](https://github.com/Kajabi/ds-tokens/commit/21bac0b))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.1.0 (2026-04-27)
 
 ### Features 🚀
