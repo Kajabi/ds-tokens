@@ -492,7 +492,7 @@
     },
     "brand": {
       "@": {
-        "value": "{color.black}",
+        "value": "{color.grey.050}",
         "type": "color"
       }
     }
