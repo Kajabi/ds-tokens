@@ -555,44 +555,46 @@ async function run() {
     });
 
     // Light config
+    // kajabi_products: emit only brand-specific overrides — pine-core.css already delivers
+    // the full core + semantic token set, so duplicating it here wastes ~20 KB per page load.
+    // pine: include everything as before.
     brandConfigs.push(createConfig(
       lightSourceFiles,
       'light',
-      (token) => {
-        const filePath = token.filePath || '';
-
-        // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
-        // Include core tokens
-        if (filePath.includes('brand/core')) return true;
-        // Include semantic tokens
-        if (filePath.includes('semantic/light')) return true;
-        // Include brand-specific tokens (new folder structure: kajabi_products/light.json)
-        if (filePath.includes(`${brandName}/light`)) return true;
-        // Include brand-specific tokens (old file structure: kajabi_products.json for backwards compat)
-        if (filePath.includes(`${brandName}.json`)) return true;
-        // Include component tokens
-        if (filePath.includes('components/') && filePath.includes('/light')) return true;
-        return false;
-      }
+      brandName === 'kajabi_products'
+        ? (token) => {
+            const filePath = token.filePath || '';
+            return filePath.includes('kajabi_products/light') || filePath.includes('kajabi_products.json');
+          }
+        : (token) => {
+            const filePath = token.filePath || '';
+            if (filePath.includes('brand/core')) return true;
+            if (filePath.includes('semantic/light')) return true;
+            if (filePath.includes(`${brandName}/light`)) return true;
+            if (filePath.includes(`${brandName}.json`)) return true;
+            if (filePath.includes('components/') && filePath.includes('/light')) return true;
+            return false;
+          }
     ));
 
     // Dark config
+    // kajabi_products: emit only brand-specific dark overrides — pine-core.css covers semantic dark.
+    // pine: include everything as before.
     brandConfigs.push(createConfig(
       darkSourceFiles,
       'dark',
-      (token) => {
-        const filePath = token.filePath || '';
-
-        // For both pine and kajabi_products brands, include semantic, brand, and component dark tokens
-        // Note: core tokens no longer have dark mode variants
-        // Include semantic dark tokens
-        if (filePath.includes('semantic/dark')) return true;
-        // Include brand-specific dark tokens (e.g., kajabi_products/dark.json)
-        if (filePath.includes(`${brandName}/dark`)) return true;
-        // Include component dark tokens
-        if (filePath.includes('components/') && filePath.includes('/dark')) return true;
-        return false;
-      }
+      brandName === 'kajabi_products'
+        ? (token) => {
+            const filePath = token.filePath || '';
+            return filePath.includes('kajabi_products/dark');
+          }
+        : (token) => {
+            const filePath = token.filePath || '';
+            if (filePath.includes('semantic/dark')) return true;
+            if (filePath.includes(`${brandName}/dark`)) return true;
+            if (filePath.includes('components/') && filePath.includes('/dark')) return true;
+            return false;
+          }
     ));
   });
 
@@ -672,23 +674,7 @@ async function run() {
     // Remove header from dark content and combine
     const semanticDarkWithoutHeader = semanticDarkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
 
-    // Site-brand theme override — member-facing pages opt in via data-theme="site".
-    // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-    // falling back to Kajabi purple when the brand variable is not set.
-    // Admin pages never have this attribute → Kajabi purple unchanged.
-    const siteBrandOverride = `
-// Site-brand theme override — member-facing pages opt in via data-theme="site".
-// Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-// falling back to Kajabi purple when the brand variable is not set.
-// Admin pages never have this attribute → Kajabi purple unchanged.
-[data-theme="site"] {
-  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
-  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
-  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
-  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
-}`;
-
-    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n' + siteBrandOverride + '\n');
+    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n');
     await fs.unlink(semanticDarkPath);
   } catch (e) {
     console.warn('Could not combine semantic files:', e.message);
@@ -724,6 +710,23 @@ async function run() {
     await themeSd.buildAllPlatforms();
   }
 
+  // Site-brand theme override — member-facing pages opt in via data-theme="site".
+  // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+  // falling back to Kajabi purple when the brand variable is not set.
+  // Admin pages never have this attribute → Kajabi purple unchanged.
+  // Lives in kajabi_products.css (not pine-core.css) because it is Kajabi-specific.
+  const siteBrandOverride = `
+// Site-brand theme override — member-facing pages opt in via data-theme="site".
+// Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+// falling back to Kajabi purple when the brand variable is not set.
+// Admin pages never have this attribute → Kajabi purple unchanged.
+[data-theme="site"] {
+  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
+  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
+  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
+  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
+}`;
+
   // Combine light and dark brand files
   for (const brandName of ['kajabi_products', 'pine']) {
     const lightPath = resolve(buildPath, `${brandName}/${brandName}.scss`);
@@ -735,7 +738,13 @@ async function run() {
       const darkContent = await fs.readFile(darkPath, 'utf-8');
       // Remove header from dark content and combine
       const darkWithoutHeader = darkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
-      await fs.writeFile(finalPath, lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n');
+      const combined = lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n';
+      // Append the site-brand override to kajabi_products only — it's Kajabi-specific
+      // and must load after pine-core.css so it wins in the cascade.
+      const finalContent = brandName === 'kajabi_products'
+        ? combined + siteBrandOverride + '\n'
+        : combined;
+      await fs.writeFile(finalPath, finalContent);
       await fs.unlink(darkPath);
     } catch (e) {
       console.warn(`Could not combine ${brandName} files:`, e.message);
