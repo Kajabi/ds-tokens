@@ -554,23 +554,18 @@ async function run() {
       }
     });
 
-    // Light config
+    // Light config — include full core + semantic + brand-specific tokens for all brands.
+    // kajabi_products.css is the sole stylesheet loaded in the admin (no pine-core.css import),
+    // so it must be self-contained: core palette + semantic layer + brand override + fonts.
     brandConfigs.push(createConfig(
       lightSourceFiles,
       'light',
       (token) => {
         const filePath = token.filePath || '';
-
-        // For both pine and kajabi_products brands, include ALL tokens (core, semantic, and components)
-        // Include core tokens
         if (filePath.includes('brand/core')) return true;
-        // Include semantic tokens
         if (filePath.includes('semantic/light')) return true;
-        // Include brand-specific tokens (new folder structure: kajabi_products/light.json)
         if (filePath.includes(`${brandName}/light`)) return true;
-        // Include brand-specific tokens (old file structure: kajabi_products.json for backwards compat)
         if (filePath.includes(`${brandName}.json`)) return true;
-        // Include component tokens
         if (filePath.includes('components/') && filePath.includes('/light')) return true;
         return false;
       }
@@ -582,14 +577,8 @@ async function run() {
       'dark',
       (token) => {
         const filePath = token.filePath || '';
-
-        // For both pine and kajabi_products brands, include semantic, brand, and component dark tokens
-        // Note: core tokens no longer have dark mode variants
-        // Include semantic dark tokens
         if (filePath.includes('semantic/dark')) return true;
-        // Include brand-specific dark tokens (e.g., kajabi_products/dark.json)
         if (filePath.includes(`${brandName}/dark`)) return true;
-        // Include component dark tokens
         if (filePath.includes('components/') && filePath.includes('/dark')) return true;
         return false;
       }
@@ -672,23 +661,7 @@ async function run() {
     // Remove header from dark content and combine
     const semanticDarkWithoutHeader = semanticDarkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
 
-    // Site-brand theme override — member-facing pages opt in via data-theme="site".
-    // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-    // falling back to Kajabi purple when the brand variable is not set.
-    // Admin pages never have this attribute → Kajabi purple unchanged.
-    const siteBrandOverride = `
-// Site-brand theme override — member-facing pages opt in via data-theme="site".
-// Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-// falling back to Kajabi purple when the brand variable is not set.
-// Admin pages never have this attribute → Kajabi purple unchanged.
-[data-theme="site"] {
-  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
-  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
-  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
-  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
-}`;
-
-    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n' + siteBrandOverride + '\n');
+    await fs.writeFile(semanticLightPath, semanticLightContent.trim() + '\n\n' + semanticDarkWithoutHeader.trim() + '\n');
     await fs.unlink(semanticDarkPath);
   } catch (e) {
     console.warn('Could not combine semantic files:', e.message);
@@ -724,6 +697,62 @@ async function run() {
     await themeSd.buildAllPlatforms();
   }
 
+  // Font-face declarations — sourced from @pine-ds/core pine-core.css.
+  // Included here so kajabi_products.css is the sole stylesheet loaded in the admin
+  // (pine-core.css is not imported separately).
+  const fontFaceBlock = `
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 100; src: local("Inter-Thin"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Thin.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 100; src: local("Inter-ThinItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ThinItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 200; src: local("Inter-ExtraLight"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraLight.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 200; src: local("Inter-ExtraLightItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraLightItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 300; src: local("Inter-Light"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Light.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 300; src: local("Inter-LightItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-LightItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 400; src: local("Inter-Regular"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Regular.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 400; src: local("Inter-Italic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Italic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 500; src: local("Inter-Medium"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Medium.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 500; src: local("Inter-MediumItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-MediumItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 600; src: local("Inter-SemiBold"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-SemiBold.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 600; src: local("Inter-SemiBoldItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-SemiBoldItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 700; src: local("Inter-Bold"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Bold.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 700; src: local("Inter-BoldItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-BoldItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 800; src: local("Inter-ExtraBold"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraBold.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 800; src: local("Inter-ExtraBoldItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraBoldItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: normal; font-weight: 900; src: local("Inter-Black"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Black.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Inter"; font-style: italic; font-weight: 900; src: local("Inter-BlackItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-BlackItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 200; src: local("FAIRE-Sprig-Thin"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Thin.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 200; src: local("FAIRE-Sprig-ThinItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-ThinItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 300; src: local("FAIRE-Sprig-Light"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Light.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 300; src: local("FAIRE-Sprig-LightItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-LightItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 400; src: local("FAIRE-Sprig-Regular"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Regular.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 400; src: local("FAIRE-Sprig-RegularItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-RegularItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 500; src: local("FAIRE-Sprig-Medium"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Medium.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 500; src: local("FAIRE-Sprig-MediumItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-MediumItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 700; src: local("FAIRE-Sprig-Bold"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Bold.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 700; src: local("FAIRE-Sprig-BoldItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-BoldItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: normal; font-weight: 900; src: local("FAIRE-Sprig-Super"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-Super.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "FAIRE Sprig"; font-style: italic; font-weight: 900; src: local("FAIRE-Sprig-SuperItalic"), url("https://sage.kajabi-cdn.com/fonts/sprig/FAIRE-Sprig-SuperItalic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Noto Sans Arabic"; font-style: normal; font-weight: normal; src: local("Noto-Sans-Arabic"), url("https://sage.kajabi-cdn.com/fonts/noto/Noto-Sans-Arabic.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Noto Sans Hebrew"; font-style: normal; font-weight: normal; src: local("Noto-Sans-Hebrew"), url("https://sage.kajabi-cdn.com/fonts/noto/Noto-Sans-Hebrew.woff2?v=1") format("woff2"); }
+@font-face { font-display: swap; font-family: "Noto Sans Devanagari"; font-style: normal; font-weight: normal; src: local("Noto-Sans-Devanagari"), url("https://sage.kajabi-cdn.com/fonts/noto/Noto-Sans-Devanagari.woff2?v=1") format("woff2"); }
+`;
+
+  // Site-brand theme override — member-facing pages opt in via data-theme="site".
+  // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+  // falling back to Kajabi purple when the brand variable is not set.
+  // Admin pages never have this attribute → Kajabi purple unchanged.
+  // Lives in kajabi_products.css (not pine-core.css) because it is Kajabi-specific.
+  const siteBrandOverride = `
+// Site-brand theme override — member-facing pages opt in via data-theme="site".
+// Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
+// falling back to Kajabi purple when the brand variable is not set.
+// Admin pages never have this attribute → Kajabi purple unchanged.
+[data-theme="site"] {
+  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
+  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
+  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
+  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
+}`;
+
   // Combine light and dark brand files
   for (const brandName of ['kajabi_products', 'pine']) {
     const lightPath = resolve(buildPath, `${brandName}/${brandName}.scss`);
@@ -735,7 +764,17 @@ async function run() {
       const darkContent = await fs.readFile(darkPath, 'utf-8');
       // Remove header from dark content and combine
       const darkWithoutHeader = darkContent.replace(/\/\*\*[\s\S]*?\*\/\s*\n\n/, '');
-      await fs.writeFile(finalPath, lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n');
+      const combined = lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n';
+      // kajabi_products.css is the sole stylesheet in the admin — prepend fonts and
+      // append the site-brand override so it's fully self-contained.
+      // Extract the auto-generated banner so it stays at line 1 after prepending fonts.
+      const headerMatch = combined.match(/^\/\*\*[\s\S]*?\*\/\s*\n+/);
+      const header = headerMatch ? headerMatch[0] : '';
+      const body = combined.slice(header.length);
+      const finalContent = brandName === 'kajabi_products'
+        ? header + fontFaceBlock + body + siteBrandOverride + '\n'
+        : combined;
+      await fs.writeFile(finalPath, finalContent);
       await fs.unlink(darkPath);
     } catch (e) {
       console.warn(`Could not combine ${brandName} files:`, e.message);
