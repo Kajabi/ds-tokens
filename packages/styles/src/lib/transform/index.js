@@ -767,8 +767,12 @@ async function run() {
       const combined = lightContent.trim() + '\n\n' + darkWithoutHeader.trim() + '\n';
       // kajabi_products.css is the sole stylesheet in the admin — prepend fonts and
       // append the site-brand override so it's fully self-contained.
+      // Extract the auto-generated banner so it stays at line 1 after prepending fonts.
+      const headerMatch = combined.match(/^\/\*\*[\s\S]*?\*\/\s*\n+/);
+      const header = headerMatch ? headerMatch[0] : '';
+      const body = combined.slice(header.length);
       const finalContent = brandName === 'kajabi_products'
-        ? fontFaceBlock + combined + siteBrandOverride + '\n'
+        ? header + fontFaceBlock + body + siteBrandOverride + '\n'
         : combined;
       await fs.writeFile(finalPath, finalContent);
       await fs.unlink(darkPath);
