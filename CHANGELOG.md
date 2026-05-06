@@ -1,3 +1,20 @@
+## 1.1.2 (2026-05-06)
+
+### Bug Fixes 🐛
+
+- use KAJABI_CI_GH_TOKEN to match org bot convention ([5260f6b](https://github.com/Kajabi/ds-tokens/commit/5260f6b))
+- **FLEX-3032:** make kajabi_products.css fully self-contained; drop pine-core.css dependency ([1e63667](https://github.com/Kajabi/ds-tokens/commit/1e63667))
+- **release:** use kajabi-github-actions PAT to bypass branch protection ([40eacf2](https://github.com/Kajabi/ds-tokens/commit/40eacf2))
+- **release:** pin origin remote to PAT to bypass branch protection ([06f815a](https://github.com/Kajabi/ds-tokens/commit/06f815a))
+- **release:** drop redundant checkout in setup that wiped PAT auth ([d77c603](https://github.com/Kajabi/ds-tokens/commit/d77c603))
+- **styles:** strip duplicate Pine tokens from kajabi_products.css (FLEX-3032) ([3e9f211](https://github.com/Kajabi/ds-tokens/commit/3e9f211))
+- **transform:** keep auto-generated banner at line 1 in kajabi_products.css ([12304a0](https://github.com/Kajabi/ds-tokens/commit/12304a0))
+
+### ❤️ Thank You
+
+- Paul Simpson
+- Quinton Jason
+
 ## 1.1.1 (2026-04-29)
 
 ### Bug Fixes 🐛
