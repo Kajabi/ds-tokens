@@ -13,6 +13,17 @@ register(StyleDictionary, {
 
 const buildPath = `_generated/`;
 
+// Duration tokens collapse to 0ms under prefers-reduced-motion so components
+// referencing var(--pine-motion-duration-*) inherit the override automatically.
+const motionReducedBlock = `
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}`;
+
 // Custom format for component CSS variables with :host selector
 StyleDictionary.registerFormat({
   name: 'css/variables-host',
@@ -239,6 +250,10 @@ StyleDictionary.registerFormat({
       }
     }
 
+    if (options.appendMotionReduced) {
+      output += motionReducedBlock + '\n';
+    }
+
     return output;
   }
 });
@@ -327,7 +342,8 @@ async function run() {
             options: {
               outputReferences: true,
               prefix: 'pine',
-              mode: 'light'
+              mode: 'light',
+              appendMotionReduced: true
             }
           }
         ],
@@ -546,7 +562,8 @@ async function run() {
             options: {
               outputReferences: true,
               prefix: 'pine',
-              mode: mode
+              mode: mode,
+              appendMotionReduced: mode === 'light'
             }
           }],
           prefix: 'pine'

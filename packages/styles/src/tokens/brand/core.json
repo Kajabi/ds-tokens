@@ -1132,6 +1132,38 @@
       "type": "letterSpacing"
     }
   },
+  "motion-duration": {
+    "none": {
+      "value": "0ms",
+      "type": "other"
+    },
+    "fast": {
+      "value": "120ms",
+      "type": "other"
+    },
+    "base": {
+      "value": "200ms",
+      "type": "other"
+    },
+    "slow": {
+      "value": "300ms",
+      "type": "other"
+    }
+  },
+  "motion-easing": {
+    "out": {
+      "value": "cubic-bezier(0, 0, 0.2, 1)",
+      "type": "other"
+    },
+    "in": {
+      "value": "cubic-bezier(0.4, 0, 1, 1)",
+      "type": "other"
+    },
+    "in-out": {
+      "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "type": "other"
+    }
+  },
   "z-index": {
     "0": {
       "value": "0",

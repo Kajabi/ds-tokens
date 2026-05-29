@@ -252,6 +252,13 @@
   --pine-letter-spacing-185: 0.26px;
   --pine-letter-spacing-078: 0.11px;
   --pine-letter-spacing-085: 0.12px;
+  --pine-motion-duration-none: 0ms;
+  --pine-motion-duration-fast: 120ms;
+  --pine-motion-duration-base: 200ms;
+  --pine-motion-duration-slow: 300ms;
+  --pine-motion-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --pine-motion-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --pine-motion-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --pine-z-index-0: 0;
   --pine-z-index-1: 1000;
   --pine-z-index-2: 2000;
@@ -264,3 +271,11 @@
   --pine-z-index-n1: -1;
 }
 
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}

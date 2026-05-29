@@ -433,6 +433,13 @@
   --pine-letter-spacing-heading-4: var(--pine-letter-spacing-142);
   --pine-letter-spacing-heading-5: var(--pine-letter-spacing-128);
   --pine-letter-spacing-heading-6: var(--pine-letter-spacing-114);
+  --pine-motion-duration-none: 0ms;
+  --pine-motion-duration-fast: 120ms;
+  --pine-motion-duration-base: 200ms;
+  --pine-motion-duration-slow: 300ms;
+  --pine-motion-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --pine-motion-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --pine-motion-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --pine-z-index-0: 0;
   --pine-z-index-1: 1000;
   --pine-z-index-2: 2000;
@@ -482,6 +489,15 @@
   --pine-typography-body-sm-brand-text: var(--pine-font-weight-medium) var(--pine-font-size-body-sm)/var(--pine-line-height-body) var(--pine-font-family-faire-sprig);
   --pine-outline-focus: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
   --pine-outline-focus-danger: var(--pine-border-width-thick) solid var(--pine-color-focus-ring-danger);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
 }
 
 [data-theme="dark"] {
