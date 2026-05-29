@@ -13,6 +13,24 @@ register(StyleDictionary, {
 
 const buildPath = `_generated/`;
 
+// Duration tokens collapse to 0ms under prefers-reduced-motion so components
+// referencing var(--pine-motion-duration-*) inherit the override automatically.
+const motionReducedBlock = `
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}`;
+
+async function appendMotionReducedBlock(filePath) {
+  const content = await fs.readFile(filePath, 'utf-8');
+  if (content.includes('--pine-motion-duration-fast') && !content.includes('prefers-reduced-motion')) {
+    await fs.writeFile(filePath, content.trimEnd() + motionReducedBlock + '\n');
+  }
+}
+
 // Custom format for component CSS variables with :host selector
 StyleDictionary.registerFormat({
   name: 'css/variables-host',
@@ -646,6 +664,7 @@ async function run() {
   // Build all platforms in order
   // Build light first to temp files, then dark to temp files, then combine
   await coreSdLight.buildAllPlatforms();
+  await appendMotionReducedBlock(resolve(buildPath, 'base/_core.scss'));
   await semanticSdLight.buildAllPlatforms();
   await semanticSdDark.buildAllPlatforms();
 
@@ -775,6 +794,7 @@ async function run() {
         ? header + fontFaceBlock + body + siteBrandOverride + '\n'
         : combined;
       await fs.writeFile(finalPath, finalContent);
+      await appendMotionReducedBlock(finalPath);
       await fs.unlink(darkPath);
     } catch (e) {
       console.warn(`Could not combine ${brandName} files:`, e.message);
