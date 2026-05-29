@@ -24,13 +24,6 @@ const motionReducedBlock = `
   }
 }`;
 
-async function appendMotionReducedBlock(filePath) {
-  const content = await fs.readFile(filePath, 'utf-8');
-  if (content.includes('--pine-motion-duration-fast') && !content.includes('prefers-reduced-motion')) {
-    await fs.writeFile(filePath, content.trimEnd() + motionReducedBlock + '\n');
-  }
-}
-
 // Custom format for component CSS variables with :host selector
 StyleDictionary.registerFormat({
   name: 'css/variables-host',
@@ -257,6 +250,10 @@ StyleDictionary.registerFormat({
       }
     }
 
+    if (options.appendMotionReduced) {
+      output += motionReducedBlock + '\n';
+    }
+
     return output;
   }
 });
@@ -345,7 +342,8 @@ async function run() {
             options: {
               outputReferences: true,
               prefix: 'pine',
-              mode: 'light'
+              mode: 'light',
+              appendMotionReduced: true
             }
           }
         ],
@@ -564,7 +562,8 @@ async function run() {
             options: {
               outputReferences: true,
               prefix: 'pine',
-              mode: mode
+              mode: mode,
+              appendMotionReduced: mode === 'light'
             }
           }],
           prefix: 'pine'
@@ -664,7 +663,6 @@ async function run() {
   // Build all platforms in order
   // Build light first to temp files, then dark to temp files, then combine
   await coreSdLight.buildAllPlatforms();
-  await appendMotionReducedBlock(resolve(buildPath, 'base/_core.scss'));
   await semanticSdLight.buildAllPlatforms();
   await semanticSdDark.buildAllPlatforms();
 
@@ -794,7 +792,6 @@ async function run() {
         ? header + fontFaceBlock + body + siteBrandOverride + '\n'
         : combined;
       await fs.writeFile(finalPath, finalContent);
-      await appendMotionReducedBlock(finalPath);
       await fs.unlink(darkPath);
     } catch (e) {
       console.warn(`Could not combine ${brandName} files:`, e.message);

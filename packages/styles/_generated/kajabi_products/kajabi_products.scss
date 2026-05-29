@@ -491,6 +491,15 @@
   --pine-outline-focus-danger: var(--pine-border-width-thick) solid var(--pine-color-focus-ring-danger);
 }
 
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}
+
 [data-theme="dark"] {
   --pine-color-accent: var(--pine-color-purple-500);
   --pine-color-accent-disabled: var(--pine-color-purple-100);
@@ -606,11 +615,4 @@
   --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
   --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
   --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
-}
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --pine-motion-duration-fast: 0ms;
-    --pine-motion-duration-base: 0ms;
-    --pine-motion-duration-slow: 0ms;
-  }
 }

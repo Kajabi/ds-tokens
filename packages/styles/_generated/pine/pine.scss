@@ -457,6 +457,15 @@
   --pine-outline-focus-danger: var(--pine-border-width-thick) solid var(--pine-color-focus-ring-danger);
 }
 
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}
+
 [data-theme="dark"] {
   --pine-color-accent: var(--pine-color-purple-500);
   --pine-color-accent-disabled: var(--pine-color-purple-100);
@@ -561,11 +570,4 @@
   --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-600);
   --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-600);
-}
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --pine-motion-duration-fast: 0ms;
-    --pine-motion-duration-base: 0ms;
-    --pine-motion-duration-slow: 0ms;
-  }
 }
