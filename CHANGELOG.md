@@ -1,3 +1,17 @@
+## 1.3.0 (2026-05-29)
+
+### Features 🚀
+
+- publish motion duration and easing tokens ([c1de679](https://github.com/Kajabi/ds-tokens/commit/c1de679))
+
+### Bug Fixes 🐛
+
+- emit motion reduced-motion block from Style Dictionary format ([349dcbe](https://github.com/Kajabi/ds-tokens/commit/349dcbe))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.2.0 (2026-05-13)
 
 ### Features 🚀
