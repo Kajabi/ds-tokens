@@ -111,7 +111,7 @@ jobs:
 
       - name: Publish only
         if: ${{ inputs.publish_only }}
-        run: npx nx release publish --yes
+        run: npx nx release publish --tag ${{ inputs.tag }} --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
