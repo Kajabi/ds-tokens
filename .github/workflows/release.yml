@@ -68,6 +68,11 @@ on:
           - premajor
           - prerelease
 
+      publish_only:
+        type: boolean
+        description: Publish the current version on disk without bumping version or creating a release.
+        default: false
+
 jobs:
   release:
     permissions:
@@ -104,16 +109,25 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Publish only
+        if: ${{ inputs.publish_only }}
+        run: npx nx release publish --tag "$TAG" --yes
+        env:
+          TAG: ${{ inputs.tag }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
       - name: Release
-        if: ${{ inputs.version == '' }}
+        if: ${{ !inputs.publish_only && inputs.version == '' }}
         run: npx nx release --yes
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
         ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
       - name: Release with Input Version
-        if: ${{ inputs.version != '' }}
+        if: ${{ !inputs.publish_only && inputs.version != '' }}
         run: npx nx release ${{ github.event.inputs.version }} --preid ${{ inputs.preid }} --yes
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
