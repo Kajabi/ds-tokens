@@ -132,6 +132,11 @@
           "value": "{color.grey.300}",
           "type": "color"
         }
+      },
+      "overlay": {
+        "value": "{color.white}",
+        "type": "color",
+        "description": "Modal and overlay panel background"
       }
     },
     "border": {
