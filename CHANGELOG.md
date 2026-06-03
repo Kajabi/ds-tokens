@@ -1,3 +1,19 @@
+## 1.4.0 (2026-06-03)
+
+### Features 🚀
+
+- add color-background-overlay token for modal surfaces ([789de7d](https://github.com/Kajabi/ds-tokens/commit/789de7d))
+
+### Bug Fixes 🐛
+
+- **release:** add publish-only workflow and npm auth for release step ([101d38e](https://github.com/Kajabi/ds-tokens/commit/101d38e))
+- **release:** pass npm dist-tag to publish-only step ([8273ffd](https://github.com/Kajabi/ds-tokens/commit/8273ffd))
+- **release:** pass npm tag via env to avoid workflow injection ([0351152](https://github.com/Kajabi/ds-tokens/commit/0351152))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.3.0 (2026-05-29)
 
 ### Features 🚀
