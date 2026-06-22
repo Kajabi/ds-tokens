@@ -49,3 +49,18 @@ runs:
     - name: Build Styles
       run: npx nx run @kajabi-ui/styles:build
       shell: bash
+
+    # Golden-output gate: the committed files in packages/styles/_generated are the
+    # source of truth consumed by Pine and other apps. The build regenerates them, so
+    # any drift between a fresh build and what's committed means the generated tokens
+    # were not regenerated/committed after a source or transform change. Fail loudly
+    # rather than letting a silent output regression ship downstream.
+    - name: Verify generated tokens are in sync
+      shell: bash
+      run: |
+        if ! git diff --exit-code -- packages/styles/_generated; then
+          echo "::error::Generated token output in packages/styles/_generated is out of sync with the token source."
+          echo "A fresh build produced different output than what is committed."
+          echo "Fix: run 'npx nx run @kajabi-ui/styles:build' and commit the changes under packages/styles/_generated."
+          exit 1
+        fi
