@@ -66,51 +66,18 @@ npx nx graph
 
 ## Contributing
 
-We welcome contributions from the team! Here's how to get started:
+We welcome contributions from the team. Because `@kajabi-ui/styles` is a contract
+that Pine and downstream apps depend on, please read:
 
-### Contribution Workflow
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** — setup, how to add or change a token,
+  regenerating output, branch/commit conventions, and the PR process.
+- **[VERSIONING.md](./VERSIONING.md)** — what counts as a breaking change, the
+  deprecation policy, and how releases are cut.
 
-1. **Fork & Clone**: Fork the repository on GitHub, then clone your fork locally.
-   ```bash
-   # Fork the repo on GitHub first, then:
-   git clone https://github.com/YOUR-USERNAME/ds-tokens.git
-   cd ds-tokens
-   ```
-
-2. **Create a Branch**: Create a new branch for your feature or bug fix.
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Make Changes**: Implement your changes following our coding standards.
-
-4. **Lint Code**: Ensure your changes meet our code quality standards.
-   ```bash
-   npx nx affected --target=lint
-   ```
-
-5. **Commit Changes**: We follow [Conventional Commits](https://www.conventionalcommits.org/) standards for commit messages.
-   ```bash
-   git commit -m "feat: add new color token system"
-   git commit -m "fix: resolve color token inconsistency"
-   git commit -m "docs: update token documentation"
-   ```
-
-   Common types include: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, and `chore`.
-
-6. **Push Changes**: Push your branch to GitHub.
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-7. **Create Pull Request**: Open a PR against the main branch and request reviews.
-
-### Development Guidelines
-
-- Follow the existing code style and conventions
-- Add tests for new features
-- Update documentation when necessary
-- Make sure all tests pass before submitting a PR
+Quick notes: changes follow [Conventional Commits](https://www.conventionalcommits.org/)
+(the commit type drives the release version), and branch names use a
+`type/description` form (`feat/…`, `fix/…`, etc. — `feature/…` is rejected by the
+branch-name hook).
 
 ## License
 
