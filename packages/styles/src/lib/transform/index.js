@@ -103,6 +103,12 @@ StyleDictionary.registerFormat({
       return `var(--${prefix}-${varName})`;
     };
 
+    // Helper for composite-token parts (typography): a `{ref}` becomes a var(),
+    // but a literal CSS value (e.g. fontFamily "monospace") is emitted as-is.
+    // Without this, literals get wrapped into bogus refs like var(--pine-monospace).
+    const partToValue = (raw, prefix) =>
+      /\{.+\}/.test(raw) ? refToVar(raw.replace(/[{}]/g, ''), prefix) : raw;
+
     // Helper to convert token references to CSS variable references
     const formatTokenValue = (token, prefix) => {
       const originalValue = token.original?.value || token.value;
@@ -114,24 +120,20 @@ StyleDictionary.registerFormat({
 
         // fontWeight
         if (originalValue.fontWeight) {
-          const fwRef = originalValue.fontWeight.replace(/[{}]/g, '');
-          parts.push(refToVar(fwRef, prefix));
+          parts.push(partToValue(originalValue.fontWeight, prefix));
         }
 
         // fontSize / lineHeight
         if (originalValue.fontSize && originalValue.lineHeight) {
-          const fsRef = originalValue.fontSize.replace(/[{}]/g, '');
-          const lhRef = originalValue.lineHeight.replace(/[{}]/g, '').replace(/\s*\*\s*100%/, '');
-          parts.push(`${refToVar(fsRef, prefix)}/${refToVar(lhRef, prefix)}`);
+          const lineHeight = originalValue.lineHeight.replace(/\s*\*\s*100%/, '');
+          parts.push(`${partToValue(originalValue.fontSize, prefix)}/${partToValue(lineHeight, prefix)}`);
         } else if (originalValue.fontSize) {
-          const fsRef = originalValue.fontSize.replace(/[{}]/g, '');
-          parts.push(refToVar(fsRef, prefix));
+          parts.push(partToValue(originalValue.fontSize, prefix));
         }
 
         // fontFamily
         if (originalValue.fontFamily) {
-          const ffRef = originalValue.fontFamily.replace(/[{}]/g, '');
-          parts.push(refToVar(ffRef, prefix));
+          parts.push(partToValue(originalValue.fontFamily, prefix));
         }
 
         return parts.join(' ');
