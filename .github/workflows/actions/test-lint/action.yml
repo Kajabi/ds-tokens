@@ -43,3 +43,7 @@ runs:
     - name: Lint
       run : npx nx affected --target=lint --parallel=3
       shell: bash
+
+    - name: Test
+      run: npx nx run @kajabi-ui/styles:test
+      shell: bash
