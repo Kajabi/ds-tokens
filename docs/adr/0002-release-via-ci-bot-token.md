@@ -26,10 +26,14 @@ The `release` workflow authenticates as the **`kajabi-github-actions` bot** usin
 - Release commits appear under the bot identity rather than a human author.
 - Releases are a deliberate manual step — nothing ships just by merging to `main` (acceptable, and arguably desirable, for a contract package).
 
+### Security boundary
+
+The token is a shared Kajabi CI credential, not scoped to this repo, and is only consumed by the `release` workflow. Governance of it — repository/scope, the branch-protection bypass allowance, rotation, and revocation — lives with the team that owns `.github/` here: **`@kajabi/production-engineering`** (per [`CODEOWNERS`](../../.github/CODEOWNERS)), not the DSS team. This ADR records *why* the release path uses it; the operational controls are owned and documented on the platform side.
+
 ## Alternatives considered
 
 - **Disable branch protection on `main`** — rejected: removes the guardrail for all changes to protect a once-per-release push.
-- **Use the default `GITHUB_TOKEN`** — rejected: it cannot push past branch protection, which is the whole problem.
+- **Use the default `GITHUB_TOKEN`** — rejected: under this repo's current branch-protection rules it is not a permitted bypass actor, so it can't push the release commit. (GitHub *can* be configured to let Actions bypass protection, but that isn't — and shouldn't need to be — set up here.)
 - **Release from a maintainer's machine** — rejected: not reproducible, not auditable, and ties releases to one person's environment.
 
 ## References

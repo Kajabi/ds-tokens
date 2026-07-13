@@ -1,8 +1,8 @@
 # NNNN. Short title (imperative)
 
-- **Status:** Proposed | Accepted | Superseded by ADR-NNNN | Deprecated
+- **Status:** Proposed | Accepted | Accepted (retrospective) | Superseded by ADR-NNNN | Deprecated
 - **Date:** YYYY-MM-DD
-- **Deciders:** @github-handle, @github-handle
+- **Maintainers:** @github-handle, @github-handle
 
 ## Context
 

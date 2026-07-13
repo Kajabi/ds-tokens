@@ -14,6 +14,7 @@ We use a lightweight [MADR](https://adr.github.io/madr/) variant. Each ADR is a 
 2. **Decision** — what we chose
 3. **Consequences** — what we accept by choosing it (good and bad)
 4. **Alternatives considered** — what we rejected and why
+5. **References** (optional) — links to PRs, code, tickets, or prior art
 
 See [`0000-template.md`](./0000-template.md).
 
@@ -24,8 +25,12 @@ See [`0000-template.md`](./0000-template.md).
 | [0001](./0001-three-tier-token-architecture.md) | Three-tier tokens via Tokens Studio + Style Dictionary | Accepted (retrospective) |
 | [0002](./0002-release-via-ci-bot-token.md) | Release via CI bot token without disabling branch protection | Accepted (retrospective) |
 | [0003](./0003-theming-via-token-sets.md) | Theming via Tokens Studio sets and `[data-theme]` selectors | Accepted (retrospective) |
+| [0004](./0004-cdn-distribution-via-jsdelivr.md) | Distribute tokens over the jsDelivr CDN as a first-class channel | Accepted (retrospective) |
+| [0005](./0005-committed-generated-output.md) | Commit generated output as the versioned contract | Accepted (retrospective) |
+| [0006](./0006-pine-prefix-namespace.md) | Emit a `--pine-*` namespace decoupled from the package name | Accepted (retrospective) |
+| [0007](./0007-lint-mappings-export.md) | Export `lint-mappings` as a cross-repo enforcement contract | Accepted (retrospective) |
 
-ADRs 0001–0003 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
+ADRs 0001–0007 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
 
 ## When to write a new ADR
 
