@@ -45,6 +45,15 @@ prefixed `--pine-*`.
 
 ## Making a change
 
+> **Authoring in Figma (Token Studio).** These source JSON files are the
+> [Tokens Studio](https://tokens.studio/) export format — Figma is the design
+> source of truth, and `$themes.json` / `$metadata.json` are Token Studio's own
+> files. Token changes often originate in Figma and are synced here; editing the
+> JSON directly (below) is the code side of the same files. For a change that
+> should round-trip to design, coordinate with @Kajabi/dss-devs so Figma and the
+> repo don't diverge. See [Using Token Studio](./packages/styles/README.md#using-token-studio)
+> and [ADR-0001](./docs/adr/0001-three-tier-token-architecture.md).
+
 1. **Edit the source JSON**, not the generated output. Pick the right tier:
    - new raw value (a color, a spacing step) → `brand/core.json`
    - a role (text, background, border, etc.) → `semantic/light.json` + `semantic/dark.json`
