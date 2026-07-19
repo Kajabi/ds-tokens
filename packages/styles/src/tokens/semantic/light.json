@@ -187,7 +187,7 @@
     },
     "focus-ring": {
       "@": {
-        "value": "{color.grey.600}",
+        "value": "{color.grey.500}",
         "type": "color"
       },
       "danger": {
