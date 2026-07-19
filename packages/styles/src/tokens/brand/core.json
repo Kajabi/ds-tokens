@@ -1130,6 +1130,10 @@
     "085": {
       "value": "0.12px",
       "type": "letterSpacing"
+    },
+    "tight": {
+      "value": "-0.025em",
+      "type": "letterSpacing"
     }
   },
   "motion-duration": {
