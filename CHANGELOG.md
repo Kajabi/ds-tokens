@@ -1,3 +1,20 @@
+## 1.4.1 (2026-07-20)
+
+### Bug Fixes 🐛
+
+- emit literal font-family keywords in typography tokens instead of bogus var() refs ([43e7993](https://github.com/Kajabi/ds-tokens/commit/43e7993))
+
+### Documentation 📄
+
+- add architecture decision records for token design ([13e2ece](https://github.com/Kajabi/ds-tokens/commit/13e2ece))
+- address ADR review and add CDN, output, prefix, and lint-mappings ADRs ([a9f2259](https://github.com/Kajabi/ds-tokens/commit/a9f2259))
+- add CONTRIBUTING and versioning policy for token contributors ([8ef4539](https://github.com/Kajabi/ds-tokens/commit/8ef4539))
+- cross-link Token Studio / Figma authoring path in CONTRIBUTING ([b690bfc](https://github.com/Kajabi/ds-tokens/commit/b690bfc))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 1.4.0 (2026-06-03)
 
 ### Features 🚀
