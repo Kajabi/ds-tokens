@@ -651,11 +651,11 @@
     },
     "heading": {
       "1": {
-        "value": "{letter-spacing.tight}",
+        "value": "{letter-spacing.n070}",
         "type": "letterSpacing"
       },
       "2": {
-        "value": "{letter-spacing.tight}",
+        "value": "{letter-spacing.n065}",
         "type": "letterSpacing"
       },
       "3": {

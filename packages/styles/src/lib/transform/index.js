@@ -260,21 +260,6 @@ StyleDictionary.registerFormat({
   }
 });
 
-// size/px reparses every dimension with parseFloat + 'px', which silently rewrites
-// authored relative units (e.g. letter-spacing "-0.025em" -> "-0.025px", a sub-pixel
-// no-op). This restores the authored unit for values that intentionally ship em/rem/%
-// so tracking can scale with font size. Must run after size/px in the transform list.
-StyleDictionary.registerTransform({
-  name: 'pine/preserve-unit',
-  type: 'value',
-  transitive: true,
-  filter: (token) => {
-    const original = token.original?.value;
-    return typeof original === 'string' && /^-?[\d.]+(em|rem|%)$/.test(original.trim());
-  },
-  transform: (token) => token.original.value.trim(),
-});
-
 async function run() {
   const $themes = JSON.parse(await fs.readFile(`${basePath}/$themes.json`, 'utf-8'));
   const allThemes = permutateThemes($themes, { separator: '-' });
@@ -349,7 +334,7 @@ async function run() {
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
         buildPath: buildPath,
         files: [
           {
@@ -387,7 +372,7 @@ async function run() {
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
         buildPath: buildPath,
         files: [
           {
@@ -419,7 +404,7 @@ async function run() {
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
         buildPath: buildPath,
         files: [
           {
@@ -457,7 +442,7 @@ async function run() {
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
         buildPath: buildPath,
         files: [...generateComponentFiles()],
         prefix: 'pine'
@@ -483,7 +468,7 @@ async function run() {
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
         buildPath: buildPath,
         files: [...generateComponentDarkFiles()],
         prefix: 'pine'
@@ -568,7 +553,7 @@ async function run() {
       platforms: {
         css: {
           transformGroup: 'tokens-studio',
-          transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px', 'pine/preserve-unit'],
+          transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
           buildPath: buildPath,
           files: [{
             destination: mode === 'light'

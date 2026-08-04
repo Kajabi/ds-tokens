@@ -1131,8 +1131,12 @@
       "value": "0.12px",
       "type": "letterSpacing"
     },
-    "tight": {
-      "value": "-0.025em",
+    "n065": {
+      "value": "-0.65px",
+      "type": "letterSpacing"
+    },
+    "n070": {
+      "value": "-0.70px",
       "type": "letterSpacing"
     }
   },
