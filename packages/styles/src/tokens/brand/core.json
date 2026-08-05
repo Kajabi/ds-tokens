@@ -1130,6 +1130,14 @@
     "085": {
       "value": "0.12px",
       "type": "letterSpacing"
+    },
+    "n065": {
+      "value": "-0.65px",
+      "type": "letterSpacing"
+    },
+    "n070": {
+      "value": "-0.70px",
+      "type": "letterSpacing"
     }
   },
   "motion-duration": {
