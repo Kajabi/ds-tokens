@@ -109,22 +109,58 @@ function buildHexToCore(coreTokens) {
 }
 
 /**
- * Parse a semantic token reference like "{color.grey.900}" to "grey-900"
+ * Look up a dotted token path (e.g. "color.grey.900") in a token tree.
  */
-function parseColorReference(ref) {
+function lookupTokenPath(root, path) {
+  return path
+    .split('.')
+    .reduce((node, key) => (node && typeof node === 'object' ? node[key] : undefined), root);
+}
+
+/**
+ * Resolve a token reference like "{color.grey.900}" to the core token "grey-900".
+ *
+ * A semantic token may reference another semantic token rather than the palette
+ * directly (e.g. color.accent.@ → {color.primary.@} → {color.grey.900}). These
+ * mappings only describe core tokens, so follow the chain to the palette rather
+ * than emitting the intermediate name, which is not a real core token.
+ *
+ * Returns `{ token, isAlias }`, where `isAlias` marks a role that reaches the
+ * palette only through another role.
+ */
+function resolveColorReference(ref, seen = new Set()) {
   if (!ref || typeof ref !== 'string') return null;
 
-  const match = ref.match(/\{color\.([^}]+)\}/);
+  const match = ref.match(/\{(color\.[^}]+)\}/);
   if (!match) return null;
 
-  const parts = match[1].split('.');
-  if (parts.length === 1) {
-    // Simple reference like {color.white}
-    return parts[0];
-  } else if (parts.length === 2) {
-    // Shade reference like {color.grey.900}
-    return `${parts[0]}-${parts[1]}`;
+  const path = match[1];
+  if (seen.has(path)) return null;
+  seen.add(path);
+
+  const parts = path.split('.').slice(1);
+
+  // A hit in the palette terminates the chain.
+  const coreNode = lookupTokenPath(coreTokens, path);
+  if (coreNode?.type === 'color' && typeof coreNode.value === 'string' && !coreNode.value.includes('{')) {
+    let token = null;
+    if (parts.length === 1) {
+      // Simple reference like {color.white}
+      token = parts[0];
+    } else if (parts.length === 2) {
+      // Shade reference like {color.grey.900}
+      token = `${parts[0]}-${parts[1]}`;
+    }
+    return token ? { token, isAlias: false } : null;
   }
+
+  // Otherwise keep resolving through the semantic layer.
+  const semanticNode = lookupTokenPath(semanticTokens, path);
+  if (typeof semanticNode?.value === 'string') {
+    const resolved = resolveColorReference(semanticNode.value, seen);
+    return resolved ? { ...resolved, isAlias: true } : null;
+  }
+
   return null;
 }
 
@@ -161,7 +197,11 @@ function buildContextMappings(semanticTokens) {
       }
 
       if (value?.value && value.type === 'color') {
-        const coreToken = parseColorReference(value.value);
+        const resolved = resolveColorReference(value.value);
+        // Roles that only alias another role (color.text.accent.* → color.primary.*)
+        // are not the canonical name for their color, so suggesting them over the
+        // role that owns the palette value outright would make the hint worse.
+        const coreToken = resolved && !resolved.isAlias ? resolved.token : null;
         if (coreToken) {
           // Build the semantic token name
           let semanticName = tokenPath;

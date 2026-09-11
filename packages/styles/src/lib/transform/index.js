@@ -757,19 +757,44 @@ async function run() {
 
   // Site-brand theme override — member-facing pages opt in via data-theme="site".
   // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-  // falling back to Kajabi purple when the brand variable is not set.
-  // Admin pages never have this attribute → Kajabi purple unchanged.
+  // falling back to the token's own value when the brand variable is not set.
+  // Admin pages never have this attribute → the default accent is unchanged.
   // Lives in kajabi_products.css (not pine-core.css) because it is Kajabi-specific.
+  //
+  // Fallbacks are derived from semantic/light.json rather than hardcoded, so they
+  // cannot drift from the token source (a hardcoded palette reference here silently
+  // went stale when focus-ring moved off purple). data-theme="site" is mutually
+  // exclusive with data-theme="dark", so resolving against the light set is correct.
+  const semanticLightTokens = JSON.parse(await fs.readFile(`${basePath}/semantic/light.json`, 'utf-8'));
+
+  const siteBrandFallback = (tokenPath) => {
+    const node = tokenPath.split('.').reduce((acc, key) => acc?.[key], semanticLightTokens);
+    const ref = node?.value;
+    if (typeof ref !== 'string' || !ref.startsWith('{') || !ref.endsWith('}')) {
+      throw new Error(
+        `Site-brand override: expected semantic/light.json "${tokenPath}" to be a token reference, got ${JSON.stringify(ref)}`
+      );
+    }
+    const varName = ref
+      .slice(1, -1)
+      .split('.')
+      .join('-')
+      .replace(/[^a-zA-Z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    return `var(--kj-brand-primary, var(--pine-${varName}))`;
+  };
+
   const siteBrandOverride = `
 // Site-brand theme override — member-facing pages opt in via data-theme="site".
 // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-// falling back to Kajabi purple when the brand variable is not set.
-// Admin pages never have this attribute → Kajabi purple unchanged.
+// falling back to the default accent when the brand variable is not set.
+// Admin pages never have this attribute → the default accent is unchanged.
 [data-theme="site"] {
-  --pine-color-accent:         var(--kj-brand-primary, var(--pine-color-purple-500));
-  --pine-color-accent-disabled: var(--kj-brand-primary, var(--pine-color-purple-100));
-  --pine-color-accent-hover:   var(--kj-brand-primary, var(--pine-color-purple-600));
-  --pine-color-focus-ring:     var(--kj-brand-primary, var(--pine-color-purple-300));
+  --pine-color-accent:         ${siteBrandFallback('color.accent.@')};
+  --pine-color-accent-disabled: ${siteBrandFallback('color.accent.disabled')};
+  --pine-color-accent-hover:   ${siteBrandFallback('color.accent.hover')};
+  --pine-color-focus-ring:     ${siteBrandFallback('color.focus-ring.@')};
 }`;
 
   // Combine light and dark brand files
