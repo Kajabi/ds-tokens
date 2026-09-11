@@ -297,4 +297,6 @@
   --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-600);
   --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-600);
+  --pine-outline-focus: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+  --pine-outline-focus-danger: var(--pine-border-width-thick) solid var(--pine-color-focus-ring-danger);
 }

@@ -501,5 +501,27 @@
         "type": "color"
       }
     }
+  },
+  "outline": {
+    "focus": {
+      "@": {
+        "value": {
+          "width": "{border-width.thick}",
+          "style": "solid",
+          "color": "{color.focus-ring.@}"
+        },
+        "type": "border",
+        "description": "Default focus ring"
+      },
+      "danger": {
+        "value": {
+          "color": "{color.focus-ring.danger}",
+          "style": "solid",
+          "width": "{border-width.thick}"
+        },
+        "type": "border",
+        "description": "Focus ring for danger/invalid states"
+      }
+    }
   }
 }
