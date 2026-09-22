@@ -24,8 +24,6 @@ on:
         type: string
 
     secrets:
-      NPM_TOKEN:
-        required: true
       KAJABI_CI_GH_TOKEN:
         required: true
 
@@ -94,8 +92,13 @@ jobs:
 
       - name: Setup
         uses: ./.github/workflows/actions/setup
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+
+      # Node 22 ships npm 10.x; trusted publishing needs npm 11.5.1 or newer.
+      - name: Upgrade npm for trusted publishing
+        shell: bash
+        run: |
+          npm install -g npm@11
+          npm --version
 
       - name: Install dependencies
         run: npm ci
@@ -103,18 +106,30 @@ jobs:
       - name: Build packages
         run: npx nx run-many --target=build --all
 
-      - name: Prepare NPM Token
-        run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} >> .npmrc
+      # npm authenticates this job with a short-lived OIDC token exchanged for the
+      # Trusted Publisher configured on @kajabi-ui/styles (PE-2432); there is no
+      # NPM_TOKEN secret to expire or rotate. Fail here, before `nx release`
+      # versions, commits or tags anything, if the job cannot mint that token or
+      # npm is too old to use it.
+      - name: Verify npm trusted publishing prerequisites
         shell: bash
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]; then
+            echo "::error::No OIDC token endpoint in this job. Trusted publishing needs 'id-token: write' on this job and on the job of any workflow that calls this one."
+            exit 1
+          fi
+          NPM_VERSION=$(npm --version)
+          if [ "$(printf '%s\n' 11.5.1 "$NPM_VERSION" | sort -V | head -n1)" != "11.5.1" ]; then
+            echo "::error::npm ${NPM_VERSION} is too old for trusted publishing (needs 11.5.1 or newer)."
+            exit 1
+          fi
+          echo "OIDC token endpoint available; npm ${NPM_VERSION}"
 
       - name: Publish only
         if: ${{ inputs.publish_only }}
         run: npx nx release publish --tag "$TAG" --yes
         env:
           TAG: ${{ inputs.tag }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Release
@@ -122,7 +137,6 @@ jobs:
         run: npx nx release --yes
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
         ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
@@ -131,6 +145,47 @@ jobs:
         run: npx nx release ${{ github.event.inputs.version }} --preid ${{ inputs.preid }} --yes
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
+      # `nx release` discards the publish result and exits 0 even when npm rejects
+      # the upload, and by then it has already committed, tagged, pushed and
+      # created the GitHub release — so a failed publish reads as a green job and
+      # leaves git ahead of npm. `nx release publish` skips versions that are
+      # already on the registry and returns non-zero when an upload fails, so this
+      # publishes anything the step above did not land (including a version
+      # stranded by an earlier run) and fails the job when it cannot. Ported from
+      # pine-icons; see DSS-215. The publish_only path already runs this command.
+      - name: Publish any version missing from npm
+        if: ${{ !inputs.publish_only }}
+        shell: bash
+        run: npx nx release publish
+        env:
+          NPM_CONFIG_PROVENANCE: true
+
+      # Confirm every package at the released version is queryable on npm,
+      # covering a publish that reports success without landing.
+      - name: Verify npm publish landed
+        shell: bash
+        run: |
+          set -euo pipefail
+          FAILED=0
+          for PKG_JSON in packages/*/package.json; do
+            PKG=$(node -p "require('./${PKG_JSON}').name")
+            VERSION=$(node -p "require('./${PKG_JSON}').version")
+            echo "Verifying ${PKG}@${VERSION} is available on npm…"
+            FOUND=0
+            for attempt in 1 2 3 4 5 6; do
+              if npm view "${PKG}@${VERSION}" version >/dev/null 2>&1; then
+                echo "✓ ${PKG}@${VERSION} confirmed on npm"
+                FOUND=1
+                break
+              fi
+              echo "  not visible yet (attempt ${attempt}/6), waiting 10s…"
+              sleep 10
+            done
+            if [ "$FOUND" -eq 0 ]; then
+              echo "::error::${PKG}@${VERSION} is NOT on npm. Check the nx-release-publish output above and the package's Trusted Publisher settings on npmjs.com."
+              FAILED=1
+            fi
+          done
+          exit "$FAILED"
