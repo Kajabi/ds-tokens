@@ -109,58 +109,22 @@ function buildHexToCore(coreTokens) {
 }
 
 /**
- * Look up a dotted token path (e.g. "color.grey.900") in a token tree.
+ * Parse a semantic token reference like "{color.grey.900}" to "grey-900"
  */
-function lookupTokenPath(root, path) {
-  return path
-    .split('.')
-    .reduce((node, key) => (node && typeof node === 'object' ? node[key] : undefined), root);
-}
-
-/**
- * Resolve a token reference like "{color.grey.900}" to the core token "grey-900".
- *
- * A semantic token may reference another semantic token rather than the palette
- * directly (e.g. color.accent.@ → {color.primary.@} → {color.grey.900}). These
- * mappings only describe core tokens, so follow the chain to the palette rather
- * than emitting the intermediate name, which is not a real core token.
- *
- * Returns `{ token, isAlias }`, where `isAlias` marks a role that reaches the
- * palette only through another role.
- */
-function resolveColorReference(ref, seen = new Set()) {
+function parseColorReference(ref) {
   if (!ref || typeof ref !== 'string') return null;
 
-  const match = ref.match(/\{(color\.[^}]+)\}/);
+  const match = ref.match(/\{color\.([^}]+)\}/);
   if (!match) return null;
 
-  const path = match[1];
-  if (seen.has(path)) return null;
-  seen.add(path);
-
-  const parts = path.split('.').slice(1);
-
-  // A hit in the palette terminates the chain.
-  const coreNode = lookupTokenPath(coreTokens, path);
-  if (coreNode?.type === 'color' && typeof coreNode.value === 'string' && !coreNode.value.includes('{')) {
-    let token = null;
-    if (parts.length === 1) {
-      // Simple reference like {color.white}
-      token = parts[0];
-    } else if (parts.length === 2) {
-      // Shade reference like {color.grey.900}
-      token = `${parts[0]}-${parts[1]}`;
-    }
-    return token ? { token, isAlias: false } : null;
+  const parts = match[1].split('.');
+  if (parts.length === 1) {
+    // Simple reference like {color.white}
+    return parts[0];
+  } else if (parts.length === 2) {
+    // Shade reference like {color.grey.900}
+    return `${parts[0]}-${parts[1]}`;
   }
-
-  // Otherwise keep resolving through the semantic layer.
-  const semanticNode = lookupTokenPath(semanticTokens, path);
-  if (typeof semanticNode?.value === 'string') {
-    const resolved = resolveColorReference(semanticNode.value, seen);
-    return resolved ? { ...resolved, isAlias: true } : null;
-  }
-
   return null;
 }
 
@@ -186,6 +150,14 @@ function buildContextMappings(semanticTokens) {
    */
   function processTokens(obj, context, prefix = '') {
     for (const [key, value] of Object.entries(obj)) {
+      // The accent roles are the brandable interaction color: a site can repoint
+      // them via --kj-brand-primary, so they are not a stable name for whatever
+      // palette value they happen to hold. Suggesting "text-accent-disabled" for
+      // grey-400 would point authors at a token that is allowed to change colour
+      // underneath them, and would also shadow the role that owns the value
+      // outright (text-placeholder-disabled) purely by JSON key order.
+      if (key === 'accent') continue;
+
       // Build the token path, handling "@" as the base token
       let tokenPath;
       if (key === '@') {
@@ -197,11 +169,7 @@ function buildContextMappings(semanticTokens) {
       }
 
       if (value?.value && value.type === 'color') {
-        const resolved = resolveColorReference(value.value);
-        // Roles that only alias another role (color.text.accent.* → color.primary.*)
-        // are not the canonical name for their color, so suggesting them over the
-        // role that owns the palette value outright would make the hint worse.
-        const coreToken = resolved && !resolved.isAlias ? resolved.token : null;
+        const coreToken = parseColorReference(value.value);
         if (coreToken) {
           // Build the semantic token name
           let semanticName = tokenPath;

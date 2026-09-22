@@ -763,20 +763,38 @@ async function run() {
   //
   // Fallbacks are derived from semantic/light.json rather than hardcoded, so they
   // cannot drift from the token source (a hardcoded palette reference here silently
-  // went stale when focus-ring moved off purple). data-theme="site" is mutually
-  // exclusive with data-theme="dark", so resolving against the light set is correct.
+  // went stale when focus-ring moved off purple).
+  //
+  // The fallback must name a core palette variable, never a semantic role. A CSS
+  // var() fallback is substituted at use time, so a semantic role would resolve
+  // against whatever theme the element sits under: [data-theme="site"] nested in a
+  // dark ancestor would pick up the dark value. Core palette variables are declared
+  // once and never redefined per theme, so they are safe. siteBrandFallback throws
+  // if a token drifts off the palette, because that is not visible from the JSON.
   const semanticLightTokens = JSON.parse(await fs.readFile(`${basePath}/semantic/light.json`, 'utf-8'));
+  const coreTokens = JSON.parse(await fs.readFile(`${basePath}/brand/core.json`, 'utf-8'));
+
+  const lookupPath = (root, path) => path.split('.').reduce((acc, key) => acc?.[key], root);
 
   const siteBrandFallback = (tokenPath) => {
-    const node = tokenPath.split('.').reduce((acc, key) => acc?.[key], semanticLightTokens);
-    const ref = node?.value;
+    const ref = lookupPath(semanticLightTokens, tokenPath)?.value;
     if (typeof ref !== 'string' || !ref.startsWith('{') || !ref.endsWith('}')) {
       throw new Error(
         `Site-brand override: expected semantic/light.json "${tokenPath}" to be a token reference, got ${JSON.stringify(ref)}`
       );
     }
-    const varName = ref
-      .slice(1, -1)
+
+    const refPath = ref.slice(1, -1);
+    const target = lookupPath(coreTokens, refPath);
+    if (typeof target?.value !== 'string' || target.value.includes('{')) {
+      throw new Error(
+        `Site-brand override: "${tokenPath}" must reference a core palette token so the ` +
+          `var() fallback is theme-invariant, but it references "${refPath}", which is not one. ` +
+          `Point it at a {color.<family>.<shade>} token, or drop it from the override.`
+      );
+    }
+
+    const varName = refPath
       .split('.')
       .join('-')
       .replace(/[^a-zA-Z0-9-]/g, '-')
@@ -788,7 +806,7 @@ async function run() {
   const siteBrandOverride = `
 // Site-brand theme override — member-facing pages opt in via data-theme="site".
 // Remaps accent/action tokens to defer to the site's brand color (--kj-brand-primary),
-// falling back to the default accent when the brand variable is not set.
+// falling back to the token's own value when the brand variable is not set.
 // Admin pages never have this attribute → the default accent is unchanged.
 [data-theme="site"] {
   --pine-color-accent:         ${siteBrandFallback('color.accent.@')};

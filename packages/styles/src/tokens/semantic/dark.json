@@ -28,15 +28,15 @@
   "color": {
     "accent": {
       "@": {
-        "value": "{color.primary.@}",
+        "value": "{color.grey.100}",
         "type": "color"
       },
       "disabled": {
-        "value": "{color.primary.disabled}",
+        "value": "{color.grey.800}",
         "type": "color"
       },
       "hover": {
-        "value": "{color.primary.hover}",
+        "value": "{color.white}",
         "type": "color"
       }
     },
@@ -254,15 +254,15 @@
       },
       "accent": {
         "@": {
-          "value": "{color.primary.@}",
+          "value": "{color.grey.100}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.text.primary.disabled}",
+          "value": "{color.grey.500}",
           "type": "color"
         },
         "hover": {
-          "value": "{color.primary.hover}",
+          "value": "{color.white}",
           "type": "color"
         }
       },
