@@ -24,8 +24,6 @@ on:
         type: string
 
     secrets:
-      NPM_TOKEN:
-        required: true
       KAJABI_CI_GH_TOKEN:
         required: true
 
@@ -94,8 +92,13 @@ jobs:
 
       - name: Setup
         uses: ./.github/workflows/actions/setup
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+
+      # Node 22 ships npm 10.x; trusted publishing needs npm 11.5.1 or newer.
+      - name: Upgrade npm for trusted publishing
+        shell: bash
+        run: |
+          npm install -g npm@11
+          npm --version
 
       - name: Install dependencies
         run: npm ci
@@ -103,34 +106,109 @@ jobs:
       - name: Build packages
         run: npx nx run-many --target=build --all
 
-      - name: Prepare NPM Token
-        run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} >> .npmrc
+      # npm authenticates this job with a short-lived OIDC token exchanged for the
+      # Trusted Publisher configured on @kajabi-ui/styles (PE-2432); there is no
+      # NPM_TOKEN secret to expire or rotate. Fail here, before `nx release`
+      # versions, commits or tags anything, if the job cannot mint that token or
+      # npm is too old to use it.
+      - name: Verify npm trusted publishing prerequisites
         shell: bash
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]; then
+            echo "::error::No OIDC token endpoint in this job. Trusted publishing needs 'id-token: write' on this job and on the job of any workflow that calls this one."
+            exit 1
+          fi
+          NPM_VERSION=$(npm --version)
+          if [ "$(printf '%s\n' 11.5.1 "$NPM_VERSION" | sort -V | head -n1)" != "11.5.1" ]; then
+            echo "::error::npm ${NPM_VERSION} is too old for trusted publishing (needs 11.5.1 or newer)."
+            exit 1
+          fi
+          echo "OIDC token endpoint available; npm ${NPM_VERSION}"
 
       - name: Publish only
         if: ${{ inputs.publish_only }}
         run: npx nx release publish --tag "$TAG" --yes
         env:
           TAG: ${{ inputs.tag }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Release
         if: ${{ !inputs.publish_only && inputs.version == '' }}
-        run: npx nx release --yes
+        run: npx nx release --skip-publish
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
 
         ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
       - name: Release with Input Version
         if: ${{ !inputs.publish_only && inputs.version != '' }}
-        run: npx nx release ${{ github.event.inputs.version }} --preid ${{ inputs.preid }} --yes
+        shell: bash
+        # Pass the inputs through the environment instead of interpolating ${{ }}
+        # into the shell, so a caller-supplied value cannot be injected into the
+        # command (template-injection hardening, as in pine-icons).
+        run: |
+          ARGS=("$VERSION_INPUT")
+          if [ -n "$PREID_INPUT" ]; then ARGS+=(--preid "$PREID_INPUT"); fi
+          npx nx release "${ARGS[@]}" --skip-publish
         env:
           GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+          VERSION_INPUT: ${{ inputs.version }}
+          PREID_INPUT: ${{ inputs.preid }}
 
+      # Publishing is its own step so its exit code counts. The release steps
+      # above run `nx release --skip-publish`, which versions, writes the
+      # changelog, commits, tags, pushes and creates the GitHub release but does
+      # not publish. Top-level `nx release` would publish itself and discard the
+      # result, so a failed publish read as a green job and left git ahead of npm;
+      # and a second publish run after it raced the registry, which lists an
+      # accepted publish only after several minutes and answers any retry in that
+      # window with "409 Cannot publish over previously staged version"
+      # (npm/cli#9889). `nx release publish` skips versions already on the
+      # registry and returns non-zero when an upload fails, so it also heals a
+      # version stranded by an earlier run and fails the job when npm rejects an
+      # upload. On a rerun, a 409 "previously staged" means the registry already
+      # holds the version, so it is logged and the verify step below waits for it.
+      # Ported from pine-icons; see DSS-215. The publish_only path runs the same
+      # command directly.
+      - name: Publish to npm
+        if: ${{ !inputs.publish_only }}
+        shell: bash
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          set -uo pipefail
+          npx nx release publish 2>&1 | tee "$RUNNER_TEMP/nx-release-publish.log"
+          STATUS=${PIPESTATUS[0]}
+          if [ "$STATUS" -ne 0 ] && grep -q "Cannot publish over previously staged version" "$RUNNER_TEMP/nx-release-publish.log"; then
+            echo "::warning::npm already holds this version from an earlier publish and is still processing it (npm/cli#9889). Not retrying; the next step waits for it to appear."
+            exit 0
+          fi
+          exit "$STATUS"
+
+      # Confirm every package at the released version is queryable on npm. The
+      # window is generous because the registry can take several minutes to list
+      # an accepted publish. A version that never appears has most likely wedged
+      # in npm's internal staged state (npm/cli#9889); that number is burnt, and
+      # the fix is to release the next one, not to republish this one.
+      - name: Verify npm publish landed
+        shell: bash
+        run: |
+          set -euo pipefail
+          FAILED=0
+          for PKG_JSON in packages/*/package.json; do
+            SPEC="$(node -p "require('./${PKG_JSON}').name")@$(node -p "require('./${PKG_JSON}').version")"
+            FOUND=0
+            for attempt in $(seq 1 60); do
+              if npm view "${SPEC}" version >/dev/null 2>&1; then
+                echo "✓ ${SPEC} confirmed on npm"
+                FOUND=1
+                break
+              fi
+              echo "  ${SPEC} not visible yet (attempt ${attempt}/60), waiting 10s…"
+              sleep 10
+            done
+            if [ "$FOUND" -eq 0 ]; then
+              echo "::error::${SPEC} is not on npm after 10 minutes. If the publish step reported '409 previously staged', npm accepted it but never finished processing it (npm/cli#9889) and the number is burnt: release the next patch. Otherwise check the nx-release-publish output above and the package's Trusted Publisher settings on npmjs.com."
+              FAILED=1
+            fi
+          done
+          exit "$FAILED"
