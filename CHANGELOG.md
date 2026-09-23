@@ -1,3 +1,16 @@
+## 1.4.2 (2026-09-23)
+
+### Bug Fixes 🐛
+
+- normalize Inter letter spacing at the token source ([0d81b51](https://github.com/Kajabi/ds-tokens/commit/0d81b51))
+- **styles:** repoint focus-ring token from purple to neutral grey ([#51](https://github.com/Kajabi/ds-tokens/pull/51))
+- **typography:** point heading composites at corrected letter-spacing roles ([975381d](https://github.com/Kajabi/ds-tokens/commit/975381d))
+
+### ❤️ Thank You
+
+- Cursor Agent @cursoragent
+- Sam Croswell
+
 ## 1.4.1 (2026-07-20)
 
 ### Bug Fixes 🐛
