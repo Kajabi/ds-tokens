@@ -109,22 +109,50 @@ function buildHexToCore(coreTokens) {
 }
 
 /**
- * Parse a semantic token reference like "{color.grey.900}" to "grey-900"
+ * Look up a dotted token path (e.g. "color.grey.900") in a token tree.
  */
-function parseColorReference(ref) {
+function lookupTokenPath(root, tokenPath) {
+  return tokenPath
+    .split('.')
+    .reduce((node, key) => (node && typeof node === 'object' ? node[key] : undefined), root);
+}
+
+/**
+ * Resolve a semantic token reference like "{color.grey.900}" to the core token
+ * "grey-900".
+ *
+ * A semantic token may reference another semantic role rather than the palette
+ * directly (e.g. color.accent.@ → {color.primary.@} → {color.grey.900}). These
+ * mappings describe core tokens only, so follow the chain to the palette instead
+ * of emitting the intermediate name, which is not a real core token and would
+ * ship a dangling suggestion to Pine's lint plugins.
+ */
+function resolveColorReference(ref, seen = new Set()) {
   if (!ref || typeof ref !== 'string') return null;
 
-  const match = ref.match(/\{color\.([^}]+)\}/);
+  const match = ref.match(/\{(color\.[^}]+)\}/);
   if (!match) return null;
 
-  const parts = match[1].split('.');
-  if (parts.length === 1) {
-    // Simple reference like {color.white}
-    return parts[0];
-  } else if (parts.length === 2) {
-    // Shade reference like {color.grey.900}
-    return `${parts[0]}-${parts[1]}`;
+  const tokenPath = match[1];
+  if (seen.has(tokenPath)) return null;
+  seen.add(tokenPath);
+
+  const parts = tokenPath.split('.').slice(1);
+
+  // A hit in the palette terminates the chain.
+  const coreNode = lookupTokenPath(coreTokens, tokenPath);
+  if (coreNode?.type === 'color' && typeof coreNode.value === 'string' && !coreNode.value.includes('{')) {
+    if (parts.length === 1) return parts[0]; // {color.white}
+    if (parts.length === 2) return `${parts[0]}-${parts[1]}`; // {color.grey.900}
+    return null;
   }
+
+  // Otherwise keep resolving through the semantic layer.
+  const semanticNode = lookupTokenPath(semanticTokens, tokenPath);
+  if (typeof semanticNode?.value === 'string') {
+    return resolveColorReference(semanticNode.value, seen);
+  }
+
   return null;
 }
 
@@ -161,7 +189,7 @@ function buildContextMappings(semanticTokens) {
       }
 
       if (value?.value && value.type === 'color') {
-        const coreToken = parseColorReference(value.value);
+        const coreToken = resolveColorReference(value.value);
         if (coreToken) {
           // Build the semantic token name
           let semanticName = tokenPath;
@@ -252,6 +280,32 @@ const output = {
   docsUrl: 'https://pine-design-system.netlify.app/?path=/docs/design-tokens-semantic-color--docs',
   hexToCore
 };
+
+// Per ADR-0007 this file is a cross-repo contract consumed by Pine's lint plugins,
+// but it lands in gitignored dist/, so the golden-output gate over _generated/ does
+// not cover it and CI runs tests without building. Validate here instead: every
+// core token named on the left-hand side of a mapping must really exist in the
+// palette, or Pine's rules would suggest a token that resolves to nothing.
+const knownCoreTokens = new Set(Object.values(hexToCore).flatMap((group) => Object.values(group)));
+const unknownCoreTokens = [
+  ...new Set(
+    Object.entries(contextMappings).flatMap(([context, entries]) =>
+      Object.keys(entries)
+        .filter((core) => !knownCoreTokens.has(core))
+        .map((core) => `${context}.${core} → ${entries[core]}`)
+    )
+  )
+];
+
+if (unknownCoreTokens.length > 0) {
+  console.error(
+    '❌ Mapping references core tokens that do not exist in core.json:\n' +
+      unknownCoreTokens.map((entry) => `     ${entry}`).join('\n') +
+      '\n   Pine consumes this file via the "./lint-mappings" export (ADR-0007), so a' +
+      '\n   suggestion pointing at a nonexistent core token breaks lint downstream.'
+  );
+  process.exit(1);
+}
 
 // Write the output
 fs.writeFileSync(outputPath, JSON.stringify(output, null, 2) + '\n');
