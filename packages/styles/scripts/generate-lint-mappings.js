@@ -150,6 +150,14 @@ function buildContextMappings(semanticTokens) {
    */
   function processTokens(obj, context, prefix = '') {
     for (const [key, value] of Object.entries(obj)) {
+      // The accent roles are the brandable interaction color: a site can repoint
+      // them via --kj-brand-primary, so they are not a stable name for whatever
+      // palette value they happen to hold. Suggesting "text-accent-disabled" for
+      // grey-400 would point authors at a token that is allowed to change colour
+      // underneath them, and would also shadow the role that owns the value
+      // outright (text-placeholder-disabled) purely by JSON key order.
+      if (key === 'accent') continue;
+
       // Build the token path, handling "@" as the base token
       let tokenPath;
       if (key === '@') {
