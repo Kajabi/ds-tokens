@@ -28,15 +28,15 @@
   "color": {
     "accent": {
       "@": {
-        "value": "{color.purple.500}",
+        "value": "{color.grey.100}",
         "type": "color"
       },
       "disabled": {
-        "value": "{color.purple.100}",
+        "value": "{color.grey.800}",
         "type": "color"
       },
       "hover": {
-        "value": "{color.purple.600}",
+        "value": "{color.white}",
         "type": "color"
       }
     },
@@ -254,15 +254,15 @@
       },
       "accent": {
         "@": {
-          "value": "{color.purple.900}",
+          "value": "{color.grey.100}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.purple.300}",
+          "value": "{color.grey.500}",
           "type": "color"
         },
         "hover": {
-          "value": "{color.purple.950}",
+          "value": "{color.white}",
           "type": "color"
         }
       },
@@ -499,6 +499,28 @@
       "@": {
         "value": "{color.grey.050}",
         "type": "color"
+      }
+    }
+  },
+  "outline": {
+    "focus": {
+      "@": {
+        "value": {
+          "width": "{border-width.thick}",
+          "style": "solid",
+          "color": "{color.focus-ring.@}"
+        },
+        "type": "border",
+        "description": "Default focus ring"
+      },
+      "danger": {
+        "value": {
+          "color": "{color.focus-ring.danger}",
+          "style": "solid",
+          "width": "{border-width.thick}"
+        },
+        "type": "border",
+        "description": "Focus ring for danger/invalid states"
       }
     }
   }
