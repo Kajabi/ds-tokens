@@ -143,7 +143,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.red.100}",
+        "value": "{color.red.900}",
         "type": "color"
       },
       "hover": {
@@ -167,7 +167,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.blue.100}",
+        "value": "{color.blue.900}",
         "type": "color"
       },
       "hover": {
@@ -223,7 +223,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.green.100}",
+        "value": "{color.green.900}",
         "type": "color"
       },
       "hover": {
@@ -272,7 +272,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.red.300}",
+          "value": "{color.red.600}",
           "type": "color"
         },
         "hover": {
@@ -286,7 +286,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.blue.300}",
+          "value": "{color.blue.600}",
           "type": "color"
         },
         "hover": {
@@ -440,7 +440,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.green.300}",
+          "value": "{color.green.600}",
           "type": "color"
         },
         "hover": {
@@ -454,7 +454,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.yellow.300}",
+          "value": "{color.yellow.600}",
           "type": "color"
         },
         "hover": {
@@ -469,7 +469,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.yellow.100}",
+        "value": "{color.yellow.900}",
         "type": "color"
       },
       "hover": {
