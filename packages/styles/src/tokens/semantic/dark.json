@@ -143,7 +143,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.red.100}",
+        "value": "{color.red.900}",
         "type": "color"
       },
       "hover": {
@@ -272,7 +272,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.red.300}",
+          "value": "{color.red.600}",
           "type": "color"
         },
         "hover": {
