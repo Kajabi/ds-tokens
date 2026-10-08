@@ -1,3 +1,27 @@
+# 2.0.0 (2026-10-08)
+
+### Features 🚀
+
+- **styles:** repoint accent semantic tokens to the neutral primary ramp ([809ef4a](https://github.com/Kajabi/ds-tokens/commit/809ef4a))
+- ⚠️  **styles:** use core palette refs for accent tokens ([e750039](https://github.com/Kajabi/ds-tokens/commit/e750039))
+- **styles:** add subtle and solid chip sentiment tokens ([#57](https://github.com/Kajabi/ds-tokens/pull/57))
+
+### Bug Fixes 🐛
+
+- **styles:** emit outline.focus into the dark theme block ([722e482](https://github.com/Kajabi/ds-tokens/commit/722e482))
+- **styles:** invert danger-disabled tokens for dark theme ([b6d06ed](https://github.com/Kajabi/ds-tokens/commit/b6d06ed))
+- **styles:** invert info/success/warning-disabled tokens for dark theme ([c46dc1e](https://github.com/Kajabi/ds-tokens/commit/c46dc1e))
+
+### ⚠️  Breaking Changes
+
+- **styles:** color.accent.*, color.text.accent.* and the composites
+
+### ❤️ Thank You
+
+- Cursor Agent @cursoragent
+- Phillip Lovelace
+- Quinton Jason
+
 ## 1.4.2 (2026-09-23)
 
 ### Bug Fixes 🐛
