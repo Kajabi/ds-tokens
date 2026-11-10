@@ -352,7 +352,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.600}",
+          "value": "{color.grey.500}",
           "type": "color"
         }
       },
@@ -362,7 +362,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.600}",
+          "value": "{color.grey.500}",
           "type": "color"
         },
         "hover": {
@@ -372,8 +372,9 @@
       },
       "placeholder": {
         "@": {
-          "value": "{color.grey.600}",
-          "type": "color"
+          "value": "{color.grey.700}",
+          "type": "color",
+          "description": "DSS-505: raised from grey-600 (3.89:1, failed AA 4.5:1 body text) to grey-700 (5.38:1) and off the grey-600 value shared with disabled tokens"
         },
         "disabled": {
           "value": "{color.grey.400}",
@@ -406,8 +407,9 @@
       },
       "tertiary": {
         "@": {
-          "value": "{color.grey.600}",
-          "type": "color"
+          "value": "{color.grey.700}",
+          "type": "color",
+          "description": "DSS-505: raised from grey-600 (3.89:1, failed AA 4.5:1 body text) to grey-700 (5.38:1) and off the grey-600 value shared with disabled tokens"
         },
         "disabled": {
           "value": "{color.grey.400}",
@@ -416,8 +418,9 @@
       },
       "subtle": {
         "@": {
-          "value": "{color.grey.500}",
-          "type": "color"
+          "value": "{color.grey.600}",
+          "type": "color",
+          "description": "DSS-505: raised from grey-500 (2.81:1, identical to text-disabled and below the 3:1 floor for any text size) to grey-600 (3.89:1). Only meets the 3:1 AA floor for large text (18pt/24px regular, 14pt/18.66px bold) and UI components, not the 4.5:1 floor for normal body text — restrict usage accordingly until a lint rule enforces this"
         },
         "disabled": {
           "value": "{color.grey.300}",
@@ -440,7 +443,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.600}",
+          "value": "{color.grey.500}",
           "type": "color"
         }
       },
