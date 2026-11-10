@@ -92,3 +92,108 @@ describe('generated token output', () => {
     expect(missing, `Missing critical tokens:\n${missing.join('\n')}`).toEqual([]);
   });
 });
+
+// DSS-505: semantic text tokens must stay distinguishable from disabled text, and
+// legible as body text, in both themes. Both properties collapsed silently once
+// before (an "active, de-emphasized" token and a "*-disabled" token aliased the
+// same core grey — a 1.00:1 contrast between them — and three active tokens fell
+// below WCAG AA 4.5:1 on their own background in light mode) because nothing
+// checked the *resolved* color, only that references were well-formed. This guard
+// resolves every --pine-color-text-* custom property to a real hex value and
+// checks both properties directly, so the ramp can't drift back without failing CI.
+describe('text token contrast and active/disabled distinctness (DSS-505)', () => {
+  function relativeLuminance(hex) {
+    const n = hex.replace('#', '');
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16) / 255);
+    const channel = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  }
+
+  function contrastRatio(hexA, hexB) {
+    const [l1, l2] = [relativeLuminance(hexA), relativeLuminance(hexB)].sort((a, b) => b - a);
+    return (l1 + 0.05) / (l2 + 0.05);
+  }
+
+  const coreSource = sources.find(({ rel }) => rel.endsWith('base/_core.scss'));
+  const semanticSource = sources.find(({ rel }) => rel.endsWith('base/_semantic.scss'));
+
+  // Core palette: --pine-color-grey-500: #9b9a98; (also picks up white/black).
+  const coreHex = new Map();
+  for (const m of coreSource.content.matchAll(/(--pine-color-[a-z0-9-]+):\s*(#[0-9a-f]{3,8});/gi)) {
+    coreHex.set(m[1], m[2].toLowerCase());
+  }
+
+  // Split the single generated file into its light (:root) and dark
+  // ([data-theme="dark"]) blocks, same structure the earlier tests rely on.
+  const darkMarker = '[data-theme="dark"]';
+  const darkIndex = semanticSource.content.indexOf(darkMarker);
+  const themeBlocks = {
+    light: semanticSource.content.slice(0, darkIndex),
+    dark: semanticSource.content.slice(darkIndex),
+  };
+
+  // Resolve every `--pine-color-text-*: var(--pine-color-X);` (or a direct hex) to
+  // a hex value, per theme. Tokens whose background context differs from the
+  // default page/container background are out of scope for this guard:
+  // text-inverse-* is meant for an inverse-colored surface, not the page
+  // background used below, so it is not a meaningful comparison point.
+  function resolveTextTokens(block) {
+    const resolved = new Map();
+    for (const m of block.matchAll(/(--pine-color-text(?:-[a-z0-9-]+)?):\s*(?:var\((--pine-color-[a-z0-9-]+)\)|(#[0-9a-f]{3,8}));/gi)) {
+      const [, name, ref, hex] = m;
+      if (name.includes('-inverse')) continue;
+      resolved.set(name, hex ? hex.toLowerCase() : coreHex.get(ref));
+    }
+    return resolved;
+  }
+
+  const background = { light: '#ffffff', dark: '#000000' };
+
+  for (const theme of ['light', 'dark']) {
+    const tokens = resolveTextTokens(themeBlocks[theme]);
+
+    it(`[${theme}] no active text token resolves to the same color as any disabled text token`, () => {
+      const activeEntries = [...tokens].filter(([name]) => !name.endsWith('-disabled'));
+      const disabledEntries = [...tokens].filter(([name]) => name.endsWith('-disabled'));
+
+      const collisions = [];
+      for (const [activeName, activeHex] of activeEntries) {
+        for (const [disabledName, disabledHex] of disabledEntries) {
+          if (activeHex === disabledHex) collisions.push(`${activeName} (${activeHex}) == ${disabledName}`);
+        }
+      }
+      expect(
+        collisions,
+        `Active and disabled text tokens must not alias the same color — a de-emphasized-but-active token should never render pixel-identical to a disabled one:\n${collisions.join('\n')}`
+      ).toEqual([]);
+    });
+
+    it(`[${theme}] body-text tokens meet WCAG AA (4.5:1) against the page background`, () => {
+      const bodyTextTokens = [
+        '--pine-color-text',
+        '--pine-color-text-muted',
+        '--pine-color-text-tertiary',
+        '--pine-color-text-placeholder',
+        '--pine-color-text-strong',
+      ];
+      const failures = bodyTextTokens
+        .map((name) => {
+          const hex = tokens.get(name);
+          const ratio = contrastRatio(hex, background[theme]);
+          return ratio < 4.5 ? `${name}: ${hex} on ${background[theme]} = ${ratio.toFixed(2)}:1` : null;
+        })
+        .filter(Boolean);
+      expect(failures, `Below the 4.5:1 AA floor for normal body text:\n${failures.join('\n')}`).toEqual([]);
+    });
+
+    // text-subtle is documented (see its description in src/tokens/semantic/*.json)
+    // as restricted to large text (18pt/24px regular, 14pt/18.66px bold) and UI
+    // components, where WCAG's floor is 3:1, not 4.5:1. If that restriction is
+    // ever lifted, this should be raised to the 4.5:1 check above instead.
+    it(`[${theme}] text-subtle meets the WCAG AA UI/large-text floor (3:1) against the page background`, () => {
+      const hex = tokens.get('--pine-color-text-subtle');
+      const ratio = contrastRatio(hex, background[theme]);
+      expect(ratio, `--pine-color-text-subtle: ${hex} on ${background[theme]} = ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(3);
+    });
+  }
+});
