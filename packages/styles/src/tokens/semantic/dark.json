@@ -318,7 +318,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.300}",
+          "value": "{color.grey.400}",
           "type": "color"
         }
       },
@@ -328,7 +328,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.300}",
+          "value": "{color.grey.400}",
           "type": "color"
         },
         "hover": {
@@ -338,8 +338,9 @@
       },
       "placeholder": {
         "@": {
-          "value": "{color.grey.300}",
-          "type": "color"
+          "value": "{color.grey.200}",
+          "type": "color",
+          "description": "DSS-505: moved from grey-300 to grey-200, off the value shared with disabled tokens (already well above AA at either step — this is a collision fix, not a contrast fix)"
         },
         "disabled": {
           "value": "{color.grey.500}",
@@ -372,8 +373,9 @@
       },
       "tertiary": {
         "@": {
-          "value": "{color.grey.300}",
-          "type": "color"
+          "value": "{color.grey.200}",
+          "type": "color",
+          "description": "DSS-505: moved from grey-300 to grey-200, off the value shared with disabled tokens (already well above AA at either step — this is a collision fix, not a contrast fix)"
         },
         "disabled": {
           "value": "{color.grey.500}",
@@ -382,8 +384,9 @@
       },
       "subtle": {
         "@": {
-          "value": "{color.grey.400}",
-          "type": "color"
+          "value": "{color.grey.300}",
+          "type": "color",
+          "description": "DSS-505: moved from grey-400 (identical to text-disabled) to grey-300, off every disabled token's value. Mirrors the light-mode text-subtle restriction to large text (18pt/24px regular, 14pt/18.66px bold) and UI components until a lint rule enforces it, even though this value is well above AA in dark mode — kept consistent with the light-mode token's documented restriction"
         },
         "disabled": {
           "value": "{color.grey.600}",
@@ -406,7 +409,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.300}",
+          "value": "{color.grey.400}",
           "type": "color"
         }
       },
