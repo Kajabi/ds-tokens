@@ -1,3 +1,13 @@
+## 2.0.1 (2026-11-13)
+
+### Bug Fixes 🐛
+
+- separate de-emphasized-but-active text tokens from disabled, and bring them to AA contrast ([3d8bc36](https://github.com/Kajabi/ds-tokens/commit/3d8bc36))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 # 2.0.0 (2026-10-08)
 
 ### Features 🚀
